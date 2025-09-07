@@ -3,7 +3,7 @@ from torch.utils.cpp_extension import load
 
 sigmoid_extension = load(
     name="sigmoid",
-    sources=["sigmoid.cu"]
+    sources=["./sigmoid/sigmoid_kernel.cu"]
 )
 
 x = torch.tensor([[1., 2, 3],

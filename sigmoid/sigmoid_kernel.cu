@@ -40,5 +40,5 @@ torch::Tensor sigmoid_cuda(torch::Tensor input){
 }
 
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, m){
-    m.def("sigmoid", &sigmoid_cuda, "sigmoid activation (CUDA)");
+    m.def("sigmoid", &sigmoid_cuda, "sigmoid");
 }

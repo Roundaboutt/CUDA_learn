@@ -37,8 +37,8 @@ torch::Tensor mm_cuda(torch::Tensor X, torch::Tensor Y){
     auto res = torch::zeros_like(X);
 
 
-    dim3 blocks(16, 16);
-    dim3 grids((width + 16 - 1) / 16, (width + 16 - 1) / 16);
+    dim3 blocks(32, 32);
+    dim3 grids((width + 32 - 1) / 32, (width + 32 - 1) / 32);
 
     mm_kernel<<<grids, blocks>>>(
         X.data_ptr<float>(),
@@ -48,7 +48,6 @@ torch::Tensor mm_cuda(torch::Tensor X, torch::Tensor Y){
     );
     return res;
 }
-
 
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, m){
     m.def("mm", &mm_cuda, "mm");

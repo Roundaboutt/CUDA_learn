@@ -2,9 +2,42 @@
 #include <iostream>
 #include <stdio.h>
 
+//---------------------------------------------------------------------------------------------------------------
 
+// CPU中实现
+void softmax_cpu(float* output, float* input, int N, int C){
+    float maxval = -INFINITY;
+    for (int i = 0;i < N; i++){
+        const float* inp_row = input + C * i;
+        float* out_row = output + C * i;
+
+        for (int j = 0;j < C; j++){
+            maxval = fmaxf(maxval, inp_row[j]);
+        }
+    }
+
+    for (int i = 0;i < N; i++){
+        const float* inp_row = input + C * i;
+        float* out_row = output + C * i;
+        
+        float sum = 0.0f;
+        for (int j = 0;j < C; j++){
+            out_row[j] = expf(inp_row[j] - maxval);
+            sum += out_row[j];
+        }
+
+
+        float norm = 1.0f / sum;
+        for (int j = 0;j < C; j++){
+            out_row[j] *= norm;
+        }
+    }
+
+
+}
 
 //---------------------------------------------------------------------------------------------------------------
+
 // N个向量,每个向量中有C个元素
 __global__ void softmax_kernel1(float* output, float* input, int N, int C){
 
@@ -99,7 +132,7 @@ __global__ void softmax_kernel2(float* output, float* input, int N,int C){
         output[bid * C + i] = output_row[i] / sum;
     }
 }
-
+//---------------------------------------------------------------------------------------------------------------
 
 int main(){
     int N = 32;
@@ -115,6 +148,13 @@ int main(){
         }
     }
 
+    softmax_cpu(output, input, N, C);
+
+    /*
+    for (int i = 0;i < elemCount; i++){
+        printf("%.10f\n", output[i]);
+    }
+    */
     float* d_input,* d_output;
     cudaMalloc((void**)&d_input, elemCount*sizeof(float));
     cudaMalloc((void**)&d_output, elemCount*sizeof(float));
@@ -128,7 +168,9 @@ int main(){
 
     cudaMemcpy(output, d_output, elemCount*sizeof(float), cudaMemcpyDeviceToHost);
 
+    /*
     for (int i = 0;i < elemCount; i++){
         printf("%.10f\n", output[i]);
     }
+    */
 }

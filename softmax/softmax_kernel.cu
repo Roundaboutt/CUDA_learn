@@ -2,6 +2,9 @@
 #include <iostream>
 #include <stdio.h>
 
+
+
+//---------------------------------------------------------------------------------------------------------------
 // N个向量,每个向量中有C个元素
 __global__ void softmax_kernel1(float* output, float* input, int N, int C){
 
@@ -32,6 +35,70 @@ __global__ void softmax_kernel1(float* output, float* input, int N, int C){
     }
 
 }
+//---------------------------------------------------------------------------------------------------------------
+
+//规约操作优化
+__global__ void softmax_kernel2(float* output, float* input, int N,int C){
+
+    // 声明共享显存
+    extern __shared__ float shared[];
+    int bid = blockIdx.x;
+    int tid = threadIdx.x;
+    int block_size = blockDim.x;
+    const float* input_row = input + bid * C;
+    
+    float maxval = -INFINITY;
+
+    // 每个线程处理以下下标的数据:tid, tid + block_size, tid + 2 * block_size ...
+    for (int i = tid; i < C;i += block_size){
+        // 这里为什么不需要同步? 因为线程之间没有相互依赖
+        maxval = fmaxf(maxval, input_row[i]);
+    }
+    // 每个线程负责的所有元素中的最大值 写入共享显存
+    shared[tid] = maxval;
+    __syncthreads();
+
+    // 从局部最大值中找出全局最大值
+    for (int stride = block_size / 2; stride >= 1; stride /= 2){
+
+        // 等上一轮所有线程都完成之后再比较
+        __syncthreads();
+        if (tid < stride){
+            shared[tid] = fmaxf(shared[tid], shared[tid + stride]);
+        }
+    }
+
+    __syncthreads();
+    float offset = shared[0];   // 最终的全局最大值
+
+    for (int i = tid;i < C;i += block_size){
+        output[bid * C + i] = expf(input_row[i] - offset);
+    }
+
+    const float* output_row = output + bid * C;
+    float sumval = 0.0f;
+    for (int i = tid;i < C;i += block_size){
+        sumval += output_row[i];
+    }
+
+    // 索引为tid的线程所有负责元素的和
+    shared[tid] = sumval;
+    __syncthreads();
+
+    // 规约计算全局和
+    for (int stride = block_size / 2; stride >= 1; stride /= 2){
+        __syncthreads();
+        if (tid < stride){
+            shared[tid] += shared[tid + stride];            
+        }
+    }
+
+    __syncthreads();
+    float sum = shared[0];
+    for (int i = tid;i < C;i += block_size){
+        output[bid * C + i] = output_row[i] / sum;
+    }
+}
 
 
 int main(){
@@ -54,10 +121,10 @@ int main(){
     cudaMemcpy(d_input, input, elemCount*sizeof(float), cudaMemcpyHostToDevice);
 
 
-    int blockSize = 1;  // 每个线程块中只有一个线程参与运算
+    int blockSize = 128;  // 每个线程块中只有一个线程参与运算
     int numBlocks = N;  // N个线程块,每个线程块负责一个向量
 
-    softmax_kernel1<<<numBlocks, blockSize>>>(d_output, d_input, N, C);
+    softmax_kernel2<<<numBlocks, blockSize>>>(d_output, d_input, N, C);
 
     cudaMemcpy(output, d_output, elemCount*sizeof(float), cudaMemcpyDeviceToHost);
 

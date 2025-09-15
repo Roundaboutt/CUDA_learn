@@ -133,7 +133,7 @@ __global__ void softmax_kernel2(float* output, float* input, int N, int C){
 }
 //---------------------------------------------------------------------------------------------------------------
 
-//利用warp洗牌指令优化
+
 __device__ float warpReduceSum(float val){
     for (int offset = 16; offset >= 1; offset /= 2){
         val += __shfl_down_sync(0xffffffff, val, offset, 32);
@@ -148,7 +148,10 @@ __device__ float warpReduceMax(float val){
     return val;
 }
 
-
+//---------------------------------------------------------------------------------------------------------------
+// 利用warp洗牌指令优化
+// 注意,在这个优化方法里一个线程块里的线程数量必须是32
+// 因为如果线程块大小超过了32,每个warp内会独立通信,而不是整个block内通信
 __global__ void softmax_kernel3(float* output, float* input, int N, int C){
     int bid = blockIdx.x;
     int tid = threadIdx.x;
@@ -161,7 +164,7 @@ __global__ void softmax_kernel3(float* output, float* input, int N, int C){
     }
 
     maxval = warpReduceMax(maxval);
-    float offset = __shfl_sync(0xffffffff, maxval, 0);
+    float offset = __shfl_sync(0xffffffff, maxval, 0);  // 把warp里每个线程存储的值都变成maxval
 
     float* output_row = output + bid * C;
     for (int i = tid;i < C; i += block_size){
@@ -180,8 +183,87 @@ __global__ void softmax_kernel3(float* output, float* input, int N, int C){
     }
 
 }
+//---------------------------------------------------------------------------------------------------------------
+
+// 利用warp洗牌指令和共享显存优化
+__global__ void softmax_kernel4(float* output, float* input, int N, int C){
+    int bid = blockIdx.x;
+    int tid = threadIdx.x;
+
+    int warpID = threadIdx.x / 32;   // warp编号
+    int laneID = threadIdx.x % 32;   // warp内线程编号
 
 
+    extern __shared__ float shared[];
+    int warpsPerBlock = blockDim.x / 32;
+
+    float* maxvals = shared;                    // 存放每个 warp 规约得到的最大值
+    float* sumvals = &shared[warpsPerBlock];    // 存放每个 warp 规约得到的和
+
+    float* input_row = input + bid * C;
+
+    float maxval = -INFINITY;
+    for (int i = tid;i < C; i += blockDim.x){
+        maxval = fmaxf(maxval, input_row[i]);
+    }
+
+    maxval = warpReduceMax(maxval);
+
+    if (laneID == 0){
+        maxvals[warpID] = maxval;
+    }
+    __syncthreads();
+
+
+    // 找整个block里的最大值,并保存到maxvals[0]
+    if (tid == 0){
+        float val = maxvals[0];
+        for (int i = 1;i < warpsPerBlock; i++){
+            val = fmaxf(val, maxvals[i]);
+        }
+
+        maxvals[0] = val;
+    }
+
+    __syncthreads();
+
+    float* output_row = output + bid * C;
+    float offset = maxvals[0];
+
+    for (int i = tid; i < C; i += blockDim.x){
+        output_row[i] = expf(input_row[i] - offset);
+    }
+
+
+    float sumval = 0.0f;
+
+    for (int i = tid;i < C;i += blockDim.x){
+        sumval += output_row[i];
+    }
+    sumval = warpReduceSum(sumval);
+    
+    if (laneID == 0){
+        sumvals[warpID] = sumval;
+    }
+
+    __syncthreads();
+
+    if (tid == 0){
+        float val = sumvals[0];
+        for (int i = 1;i < warpsPerBlock; i++){
+            val += sumvals[i];
+        }
+
+        sumvals[0] = val;
+    }
+
+    __syncthreads();
+
+    float sum = sumvals[0];
+    for (int i = tid; i < C; i += blockDim.x){
+        output_row[i] /= sum;
+    }
+}
 
 
 
@@ -213,10 +295,10 @@ int main(){
     cudaMemcpy(d_input, input, elemCount*sizeof(float), cudaMemcpyHostToDevice);
 
 
-    int blockSize = 32; 
+    int blockSize = 128; 
     int numBlocks = N;  // N个线程块,每个线程块负责一个向量
 
-    softmax_kernel3<<<numBlocks, blockSize>>>(d_output, d_input, N, C);
+    softmax_kernel4<<<numBlocks, blockSize>>>(d_output, d_input, N, C);
 
     cudaMemcpy(output, d_output, elemCount*sizeof(float), cudaMemcpyDeviceToHost);
 

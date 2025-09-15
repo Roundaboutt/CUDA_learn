@@ -9,7 +9,6 @@ void softmax_cpu(float* output, float* input, int N, int C){
     float maxval = -INFINITY;
     for (int i = 0;i < N; i++){
         const float* inp_row = input + C * i;
-        float* out_row = output + C * i;
 
         for (int j = 0;j < C; j++){
             maxval = fmaxf(maxval, inp_row[j]);
@@ -70,8 +69,8 @@ __global__ void softmax_kernel1(float* output, float* input, int N, int C){
 }
 //---------------------------------------------------------------------------------------------------------------
 
-//规约操作优化
-__global__ void softmax_kernel2(float* output, float* input, int N,int C){
+//利用规约操作和共享显存优化
+__global__ void softmax_kernel2(float* output, float* input, int N, int C){
 
     // 声明共享显存
     extern __shared__ float shared[];
@@ -134,6 +133,59 @@ __global__ void softmax_kernel2(float* output, float* input, int N,int C){
 }
 //---------------------------------------------------------------------------------------------------------------
 
+//利用warp洗牌指令优化
+__device__ float warpReduceSum(float val){
+    for (int offset = 16; offset >= 1; offset /= 2){
+        val += __shfl_down_sync(0xffffffff, val, offset, 32);
+    }
+    return val;
+}
+
+__device__ float warpReduceMax(float val){
+    for (int offset = 16; offset >= 1; offset /= 2){
+        val = fmaxf(__shfl_down_sync(0xffffffff, val, offset, 32), val);
+    }
+    return val;
+}
+
+
+__global__ void softmax_kernel3(float* output, float* input, int N, int C){
+    int bid = blockIdx.x;
+    int tid = threadIdx.x;
+    int block_size = blockDim.x;
+    
+    const float* input_row = input + bid * C;
+    float maxval = -INFINITY;
+    for (int i = tid; i < C; i += block_size){
+        maxval = fmaxf(maxval, input_row[i]);
+    }
+
+    maxval = warpReduceMax(maxval);
+    float offset = __shfl_sync(0xffffffff, maxval, 0);
+
+    float* output_row = output + bid * C;
+    for (int i = tid;i < C; i += block_size){
+        output_row[i] = expf(input_row[i] - offset);
+    }
+
+    float sumval = 0.0f;
+    for (int i = tid; i < C; i += block_size){
+        sumval += output_row[i];
+    }
+    sumval = warpReduceSum(sumval);
+
+    float sum = __shfl_sync(0xffffffff, sumval, 0);
+    for (int i = tid;i < C; i += block_size){
+        output_row[i] /= sum;
+    }
+
+}
+
+
+
+
+
+//---------------------------------------------------------------------------------------------------------------
 int main(){
     int N = 32;
     int C = 4096;
@@ -150,27 +202,27 @@ int main(){
 
     softmax_cpu(output, input, N, C);
 
-    /*
-    for (int i = 0;i < elemCount; i++){
+
+    for (int i = 0;i < 16; i++){
         printf("%.10f\n", output[i]);
     }
-    */
+    printf("--------------------------------------------------\n");
     float* d_input,* d_output;
     cudaMalloc((void**)&d_input, elemCount*sizeof(float));
     cudaMalloc((void**)&d_output, elemCount*sizeof(float));
     cudaMemcpy(d_input, input, elemCount*sizeof(float), cudaMemcpyHostToDevice);
 
 
-    int blockSize = 128;  // 每个线程块中只有一个线程参与运算
+    int blockSize = 32; 
     int numBlocks = N;  // N个线程块,每个线程块负责一个向量
 
-    softmax_kernel2<<<numBlocks, blockSize>>>(d_output, d_input, N, C);
+    softmax_kernel3<<<numBlocks, blockSize>>>(d_output, d_input, N, C);
 
     cudaMemcpy(output, d_output, elemCount*sizeof(float), cudaMemcpyDeviceToHost);
 
-    /*
-    for (int i = 0;i < elemCount; i++){
+
+    for (int i = 0;i < 16; i++){
         printf("%.10f\n", output[i]);
     }
-    */
+
 }

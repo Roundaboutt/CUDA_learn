@@ -1,6 +1,7 @@
 #include <cuda_runtime.h>
 #include <iostream>
 #include <stdio.h>
+#include <chrono>
 
 //---------------------------------------------------------------------------------------------------------------
 
@@ -202,13 +203,15 @@ __global__ void softmax_kernel4(float* output, float* input, int N, int C){
 
     float* input_row = input + bid * C;
 
+    // 先找每个线程负责的所有元素中的最大值
     float maxval = -INFINITY;
     for (int i = tid;i < C; i += blockDim.x){
         maxval = fmaxf(maxval, input_row[i]);
     }
-
+    // 利用规约找出一个warp内的最大值
     maxval = warpReduceMax(maxval);
 
+    // 把warp内的最大值写入共享显存
     if (laneID == 0){
         maxvals[warpID] = maxval;
     }
@@ -216,9 +219,10 @@ __global__ void softmax_kernel4(float* output, float* input, int N, int C){
 
 
     // 找整个block里的最大值,并保存到maxvals[0]
+    // 只分配一个线程(tid=0)来做,实际上tid取多少都行
     if (tid == 0){
         float val = maxvals[0];
-        for (int i = 1;i < warpsPerBlock; i++){
+        for (int i = 0;i < warpsPerBlock; i++){
             val = fmaxf(val, maxvals[i]);
         }
 
@@ -234,12 +238,13 @@ __global__ void softmax_kernel4(float* output, float* input, int N, int C){
         output_row[i] = expf(input_row[i] - offset);
     }
 
-
+    // 先求出每个线程负责的所有元素的和
     float sumval = 0.0f;
-
     for (int i = tid;i < C;i += blockDim.x){
         sumval += output_row[i];
     }
+
+    // 得到整个warp的和
     sumval = warpReduceSum(sumval);
     
     if (laneID == 0){
@@ -265,12 +270,10 @@ __global__ void softmax_kernel4(float* output, float* input, int N, int C){
     }
 }
 
-
-
 //---------------------------------------------------------------------------------------------------------------
 int main(){
-    int N = 32;
-    int C = 4096;
+    int N = 1024;
+    int C = 16384;
     size_t elemCount = N * C;
 
     float* input = (float*)malloc(sizeof(float)*elemCount);
@@ -278,33 +281,47 @@ int main(){
 
     for (int n = 0;n < N;n++){
         for(int c = 0;c < C;c++){
-            input[n*C + c] = float(0);
+            input[n*C + c] = float(c);
         }
     }
 
+    auto start_cpu = std::chrono::high_resolution_clock::now();
     softmax_cpu(output, input, N, C);
+    auto end_cpu = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double, std::milli> cpu_time = end_cpu - start_cpu;
 
+    std::cout<< "cpu time:" << cpu_time.count() << "ms" << std::endl;
 
-    for (int i = 0;i < 16; i++){
-        printf("%.10f\n", output[i]);
-    }
-    printf("--------------------------------------------------\n");
     float* d_input,* d_output;
     cudaMalloc((void**)&d_input, elemCount*sizeof(float));
     cudaMalloc((void**)&d_output, elemCount*sizeof(float));
     cudaMemcpy(d_input, input, elemCount*sizeof(float), cudaMemcpyHostToDevice);
 
 
-    int blockSize = 128; 
+    int blockSize = 1024; 
     int numBlocks = N;  // N个线程块,每个线程块负责一个向量
 
+    cudaEvent_t start, stop;
+    cudaEventCreate(&start);
+    cudaEventCreate(&stop);
+
+    cudaEventRecord(start);
     softmax_kernel4<<<numBlocks, blockSize>>>(d_output, d_input, N, C);
+    cudaEventRecord(stop);
 
+    cudaEventSynchronize(stop);
+
+    float gpu_time = 0;
+    cudaEventElapsedTime(&gpu_time, start, stop);
+
+    std::cout<< "gpu time:" << gpu_time << "ms" << std::endl;
+    std::cout<< "speed up:"<< (cpu_time.count() / gpu_time) << "x" << std::endl;
     cudaMemcpy(output, d_output, elemCount*sizeof(float), cudaMemcpyDeviceToHost);
+    cudaFree(d_output);
+    cudaFree(d_input);
+    cudaEventDestroy(start);
+    cudaEventDestroy(stop);
 
-
-    for (int i = 0;i < 16; i++){
-        printf("%.10f\n", output[i]);
-    }
-
+    free(input);
+    free(output);
 }

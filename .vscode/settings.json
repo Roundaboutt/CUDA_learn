@@ -14,5 +14,11 @@
             "strings": "on",
             "other": "on"
         }
+    },
+    "files.associations": {
+        "\"*.cu\"": "\"cpp\"",
+        "*.cu": "cuda-cpp",
+        "iostream": "cpp",
+        "thread": "cpp"
     }
 }

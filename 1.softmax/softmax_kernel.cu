@@ -83,7 +83,7 @@ __global__ void softmax_kernel2(float* output, float* input, int N, int C){
     float maxval = -INFINITY;
 
     // 每个线程处理以下下标的数据:tid, tid + block_size, tid + 2 * block_size ...
-    for (int i = tid; i < C;i += block_size){
+    for (int i = tid; i < C; i += block_size){
         // 这里为什么不需要同步? 因为线程之间没有相互依赖
         maxval = fmaxf(maxval, input_row[i]);
     }
@@ -291,7 +291,6 @@ int main(){
     std::chrono::duration<double, std::milli> cpu_time = end_cpu - start_cpu;
 
     std::cout<< "cpu time:" << cpu_time.count() << "ms" << std::endl;
-
     float* d_input,* d_output;
     cudaMalloc((void**)&d_input, elemCount*sizeof(float));
     cudaMalloc((void**)&d_output, elemCount*sizeof(float));
@@ -306,7 +305,7 @@ int main(){
     cudaEventCreate(&stop);
 
     cudaEventRecord(start);
-    softmax_kernel4<<<numBlocks, blockSize>>>(d_output, d_input, N, C);
+    softmax_kernel2<<<numBlocks, blockSize>>>(d_output, d_input, N, C);
     cudaEventRecord(stop);
 
     cudaEventSynchronize(stop);

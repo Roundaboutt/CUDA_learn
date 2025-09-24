@@ -19,17 +19,15 @@ __global__ void mysgemm_v2(int M, int N, int K, float alpha, float* A, float* B,
     __shared__ float As[BM * BK];
     __shared__ float Bs[BK * BN];
     
-    A = &A[by * BM * K];
-    B = &B[bx * BN];
-    C = &C[BM * N * by + BN * bx];
-
-    // 线程在块内 x,y 方向的坐标
     int tx = threadIdx.x % BN;
     int ty = threadIdx.x / BN;
 
+    A = &A[by * BM * BK];
+    B = &B[bx * BN];
+    C = &C[by * BM * N + bx * BN];
+
     float temp = 0.f;
     for (int k = 0; k < K; k += BK){
-        // 把原矩阵中的一小块搬到共享显存中
         As[ty * BK + tx] = A[ty * K + tx];
         Bs[ty * BN + tx] = B[ty * N + tx];
 
@@ -37,12 +35,15 @@ __global__ void mysgemm_v2(int M, int N, int K, float alpha, float* A, float* B,
 
         A += BK;
         B += BK * N;
+
         for (int i = 0; i < BK; i++){
-            temp += As[ty * BK + i] * Bs[BN * i + tx];
+            temp += As[ty * BK + i] * Bs[i * BN + tx];
         }
+
         __syncthreads();
+
+        C[ty * N + tx] = alpha * temp + beta * C[ty * N + tx];
     }
-    C[ty * N + tx] = alpha * temp + beta * C[ty * N + tx];
 }
 
 int main(){

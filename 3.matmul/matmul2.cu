@@ -3,29 +3,50 @@
 #include<vector>
 #include <cublas_v2.h>
 
-#define BLOCKSIZE 32
 
-//-------------------------------------------------------------------------------------------------------
-__global__ void mysgemm_v1(int M, int N, int K, float alpha, float* A, float* B, float beta, float* C){
 
-    // gy负责A(M-K)中的一行, gx负责B(K-N)中的一列
-    // gx是列索引, gy是行索引
-    int gx = threadIdx.x + blockDim.x * blockIdx.x;
-    int gy = threadIdx.y + blockDim.y * blockIdx.y;
+template <const int BLOCKSIZE>
 
-    if (gx >= N || gy >= M) return;
+__global__ void mysgemm_v2(int M, int N, int K, float alpha, float* A, float* B, float beta, float* C){
+    int bx = blockIdx.x;
+    int by = blockIdx.y;
 
-    float temp = 0.0f;
-    for (int i = 0; i < K; i++){
-        temp += A[gy * K + i] * B[i * N + gx];      // 两次访问全局显存, 效率低下
+    // 为每个线程块分配一个矩阵中的小分块进行处理
+    const int BM = BLOCKSIZE;
+    const int BN = BLOCKSIZE;
+    const int BK = BLOCKSIZE;
+
+    __shared__ float As[BM * BK];
+    __shared__ float Bs[BK * BN];
+    
+    A = &A[by * BM * K];
+    B = &B[bx * BN];
+    C = &C[BM * N * by + BN * bx];
+
+    // 线程在块内 x,y 方向的坐标
+    int tx = threadIdx.x % BN;
+    int ty = threadIdx.x / BN;
+
+    float temp = 0.f;
+    for (int k = 0; k < K; k += BK){
+        // 把原矩阵中的一小块搬到共享显存中
+        As[ty * BK + tx] = A[ty * K + tx];
+        Bs[ty * BN + tx] = B[ty * N + tx];
+
+        __syncthreads();
+
+        A += BK;
+        B += BK * N;
+        for (int i = 0; i < BK; i++){
+            temp += As[ty * BK + i] * Bs[BN * i + tx];
+        }
+        __syncthreads();
     }
-
-    C[gy * N + gx] = alpha * temp + beta * C[gy * N + gx];
+    C[ty * N + tx] = alpha * temp + beta * C[ty * N + tx];
 }
 
 int main(){
     std::vector<int> sizes = {128, 256, 512, 1024, 2048, 4096, 8192};
-
     for (int N:sizes){
         size_t elemCount = N * N;
         std::cout<<"------------------------Testing size: "<< N <<"------------------------"<< std::endl;
@@ -84,17 +105,17 @@ int main(){
             std::cout<<"cublas time:"<<cublas_time<<"ms"<<std::endl;
 
             /*------------------------v1计算------------------------*/
-            dim3 threads(BLOCKSIZE, BLOCKSIZE);
-            dim3 blocks((N + threads.x - 1) / threads.x, (N + threads.y - 1) / threads.y);
+            dim3 threads(1024); // 1024拆成了32x32
+            dim3 blocks((N + 32 - 1) / 32, (N + 32 - 1) / 32);
             
             for (int i = 0; i < warmup_time; i++){
-                mysgemm_v1<<<blocks, threads>>>(N, N, N, alpha, d_A, d_B, beta, d_C_v1);
+                mysgemm_v2<32><<<blocks, threads>>>(N, N, N, alpha, d_A, d_B, beta, d_C_v1);
             }
             cudaDeviceSynchronize();
 
             cudaEventRecord(start);
             for (int i = 0; i < repeat_time; i++){
-                mysgemm_v1<<<blocks, threads>>>(N, N, N, alpha, d_A, d_B, beta, d_C_v1);
+                mysgemm_v2<32><<<blocks, threads>>>(N, N, N, alpha, d_A, d_B, beta, d_C_v1);
             }
             cudaEventRecord(end);
             cudaEventSynchronize(end);
@@ -103,7 +124,7 @@ int main(){
             cudaEventElapsedTime(&v1_time, start, end);
 
             cudaMemcpy(C_v1, d_C_v1, numBytes, cudaMemcpyDeviceToHost);
-            std::cout<<"v1 time:"<<v1_time<<"ms"<<std::endl;
+            std::cout<<"v2 time:"<<v1_time<<"ms"<<std::endl;
 
             
             // 结果比较

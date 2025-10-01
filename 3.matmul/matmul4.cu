@@ -197,7 +197,13 @@ int main(){
             cudaMemcpy(C_v1, d_C_v1, numBytes, cudaMemcpyDeviceToHost);
             std::cout<<"v4 time:"<<v4_time<<"ms"<<std::endl;
 
-            
+            float cublas_gflops = 2.f * N * N * N * repeat_time / (cublas_time * 1e6f);
+            float v4_gflops = 2.f * N * N * N * repeat_time / (v4_time * 1e6f);
+
+            std::cout<< "cublas GFLOPS:" << cublas_gflops << std::endl;
+            std::cout<< "v4 GFLOPS:" << v4_gflops << std::endl;
+            std::cout<< "precent:" << (v4_gflops / cublas_gflops) * 100 << "%" << std::endl;
+
             // 结果比较
             bool isMatch = true;
             for (int i = 0; i < elemCount; i++){

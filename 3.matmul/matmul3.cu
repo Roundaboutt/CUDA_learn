@@ -5,7 +5,7 @@
 #include<vector>
 
 template <const int BM, const int BN, const int BK, const int TM, const int TN>
-__global__ void mysgemm_v3(int M, int N, int K, float alpha, float* A, float* B, float beta, float* C){
+__global__ void sgemm_v3(int M, int N, int K, float* A, float* B, float* C, float alpha, float beta){
     int bx = blockIdx.x;
     int by = blockIdx.y;
 
@@ -27,11 +27,11 @@ __global__ void mysgemm_v3(int M, int N, int K, float alpha, float* A, float* B,
     C = &C[BM * N * by + bx * BN];
 
     
-    int a_tile_row = threadIdx.x / BK;      // 当前线程要搬到A tile的第几行
+    int a_tile_row = threadIdx.x / BK;      // 当前线程要搬到As的第几行
     int a_tile_col = threadIdx.x % BK;
     int a_tile_stride = thread_num / BK;    // 一个线程在for循环里负责不止一行, 要隔stride行再搬
 
-    int b_tile_row = threadIdx.x / BN;      // 当前线程要搬到B tile的第几行
+    int b_tile_row = threadIdx.x / BN;      // 当前线程要搬到Bs的第几行
     int b_tile_col = threadIdx.x % BN;
     int b_tile_stride = thread_num / BN;
 
@@ -84,12 +84,12 @@ int main(){
         float* A = (float*)malloc(numBytes);
         float* B = (float*)malloc(numBytes);
         float* C_cublas = (float*)malloc(numBytes);
-        float* C_v1 = (float*)malloc(numBytes);
+        float* C_sgemm = (float*)malloc(numBytes);
 
-        float* d_A,* d_B, * d_C_v1;
+        float* d_A,* d_B, * d_C_sgemm;
         cudaMalloc(&d_A, numBytes);
         cudaMalloc(&d_B, numBytes);
-        cudaMalloc(&d_C_v1, numBytes);
+        cudaMalloc(&d_C_sgemm, numBytes);
 
         try{
             for (int i = 0; i < elemCount; i++){
@@ -107,14 +107,14 @@ int main(){
             float beta = 0.f;
             
 
-            /*------------------------cublas计算/*------------------------*/
+            /*------------------------cublas计算------------------------*/
             cudaEvent_t start, end;
             cudaEventCreate(&start);
             cudaEventCreate(&end);
 
-            int warmup_time = 10;
+            int warmup_time = 5;
             for (int i = 0; i < warmup_time; i++){
-                cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, N, N, N, &alpha, d_B, N, d_A, N, &beta, d_C_v1, N);
+                cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, N, N, N, &alpha, d_B, N, d_A, N, &beta, d_C_sgemm, N);
             }
 
             cudaDeviceSynchronize();
@@ -122,7 +122,7 @@ int main(){
             int repeat_time = 5;
             cudaEventRecord(start);
             for (int i = 0; i < repeat_time; i++){
-                cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, N, N, N, &alpha, d_B, N, d_A, N, &beta, d_C_v1, N);
+                cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, N, N, N, &alpha, d_B, N, d_A, N, &beta, d_C_sgemm, N);
             }
             cudaEventRecord(end);
             cudaEventSynchronize(end);
@@ -130,25 +130,21 @@ int main(){
             float cublas_time = 0;
             cudaEventElapsedTime(&cublas_time, start, end);
             
-            cudaMemcpy(C_cublas, d_C_v1, numBytes, cudaMemcpyDeviceToHost);
-            std::cout<<"cublas time:"<<cublas_time<<"ms"<<std::endl;
-
-            cudaDeviceSynchronize();
+            cudaMemcpy(C_cublas, d_C_sgemm, numBytes, cudaMemcpyDeviceToHost);
+            std::cout<<"cublas time:"<< cublas_time <<"ms"<<std::endl;
 
             /*------------------------v3计算------------------------*/
-            dim3 threads(256); // 
+            dim3 threads(256);
             dim3 blocks((N + 128 - 1) / 128, (N + 128 - 1) / 128);
             
             for (int i = 0; i < warmup_time; i++){
-                // BM, BN, BK, TM, TN
-                mysgemm_v3<128, 128, 8, 8, 8><<<blocks, threads>>>(N, N, N, alpha, d_A, d_B, beta, d_C_v1);
+                sgemm_v3<128, 128, 8, 8, 8><<<blocks, threads>>>(N, N, N, d_A, d_B, d_C_sgemm, alpha, beta);
             }
             cudaDeviceSynchronize();
 
             cudaEventRecord(start);
             for (int i = 0; i < repeat_time; i++){
-                // BM, BN, BK, TM, TN
-                mysgemm_v3<128, 128, 8, 8, 8><<<blocks, threads>>>(N, N, N, alpha, d_A, d_B, beta, d_C_v1);
+                sgemm_v3<128, 128, 8, 8, 8><<<blocks, threads>>>(N, N, N, d_A, d_B, d_C_sgemm, alpha, beta);
             }
             cudaEventRecord(end);
             cudaEventSynchronize(end);
@@ -156,14 +152,15 @@ int main(){
             float v3_time = 0.f;
             cudaEventElapsedTime(&v3_time, start, end);
 
-            cudaMemcpy(C_v1, d_C_v1, numBytes, cudaMemcpyDeviceToHost);
-            std::cout<<"v3 time:"<<v3_time<<"ms"<<std::endl;
+            cudaMemcpy(C_sgemm, d_C_sgemm, numBytes, cudaMemcpyDeviceToHost);
+            std::cout<<"v3 time:"<< v3_time <<"ms"<<std::endl;
 
+            std::cout<< "sgemm' GFLOPS is "<< cublas_time / v3_time * 100 << "% of cublas" << std::endl; 
             
             // 结果比较
             bool isMatch = true;
             for (int i = 0; i < elemCount; i++){
-                if (fabsf(C_cublas[i] - C_v1[i]) > 1e-3){
+                if (fabsf(C_cublas[i] - C_sgemm[i]) > 1e-5){
                     isMatch = false;
                     break;
                 }
@@ -174,7 +171,7 @@ int main(){
             
         }
         catch(...){
-            std::cerr << "Out of memory or error during testing size: " << N << std::endl;
+            std::cerr << "Error testing size: " << N << std::endl;
         }
     }
     

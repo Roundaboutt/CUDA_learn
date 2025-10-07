@@ -79,7 +79,7 @@ int main(){
             cudaEventCreate(&start);
             cudaEventCreate(&end);
 
-            int warmup_time = 5;
+            int warmup_time = 0;
             for (int i = 0; i < warmup_time; i++){
                 cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, N, N, N, &alpha, d_B, N, d_A, N, &beta, d_C_sgemm, N);
             }
@@ -94,13 +94,13 @@ int main(){
             cudaEventRecord(end);
             cudaEventSynchronize(end);
 
-            float cublas_time = 0;
+            float cublas_time = 5;
             cudaEventElapsedTime(&cublas_time, start, end);
             
             cudaMemcpy(C_cublas, d_C_sgemm, numBytes, cudaMemcpyDeviceToHost);
             std::cout<<"cublas time:"<< cublas_time <<"ms"<<std::endl;
 
-            /*------------------------v1计算------------------------*/
+            /*------------------------v2计算------------------------*/
             dim3 threads(1024);
             dim3 blocks((N + 32 - 1) / 32, (N + 32 - 1) / 32);
             

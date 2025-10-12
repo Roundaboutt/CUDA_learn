@@ -173,21 +173,6 @@ __global__  void sgemm_v5(int M, int N, int K, float* A, float* B, float* C, flo
 }
 
 
-void checkCudaError(cudaError_t err, const char *msg) {
-    if (err != cudaSuccess) {
-        std::cerr << msg << " CUDA ERROR: " << cudaGetErrorString(err) << std::endl;
-        exit(EXIT_FAILURE);
-    }
-}
-
-void checkCublasError(cublasStatus_t status, const char *msg) {
-    if (status != CUBLAS_STATUS_SUCCESS) {
-        std::cerr << msg << " CUBLAS ERROR: " << status << std::endl;
-        exit(EXIT_FAILURE);
-    }
-}
-
-
 int main(){
     std::vector<int> sizes = {128, 256, 512, 1024, 2048, 4096, 8192};
     for (int N:sizes){
@@ -247,7 +232,7 @@ int main(){
             cudaMemcpy(C_cublas, d_C_sgemm, numBytes, cudaMemcpyDeviceToHost);
             std::cout<<"cublas time:"<< cublas_time <<"ms"<<std::endl;
 
-            /*------------------------v3计算------------------------*/
+            /*------------------------v5计算------------------------*/
             dim3 threads(256);
             dim3 blocks((N + 128 - 1) / 128, (N + 128 - 1) / 128);
             

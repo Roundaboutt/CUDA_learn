@@ -171,7 +171,7 @@ int main(){
             cudaMemcpy(C_cublas, d_C_sgemm, numBytes, cudaMemcpyDeviceToHost);
             std::cout<<"cublas time:"<< cublas_time <<"ms"<<std::endl;
 
-            /*------------------------v3计算------------------------*/
+            /*------------------------v4计算------------------------*/
             dim3 threads(256);
             dim3 blocks((N + 128 - 1) / 128, (N + 128 - 1) / 128);
             

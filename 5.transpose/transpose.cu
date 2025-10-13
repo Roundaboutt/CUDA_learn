@@ -1,6 +1,25 @@
 #include <iostream>
 #include "cuda_runtime.h"
 
+
+
+float* transpose_cpu(float* output, int nx, int ny){
+
+    float input[nx * ny];
+    for (int i = 0; i < nx * ny; i++){
+        input[i] = float(i);
+    }
+
+    for (int i = 0; i < ny; i++){
+        for (int j = 0; j < nx; j++){
+            // output[j][i] = input[i][j];
+            output[j * ny + i] = input[i * nx + j];
+        }
+    }
+    return output;
+}
+
+
 __global__ void transpose_v1(float* output, float* input, int nx, int ny){
     int id_x = threadIdx.x + blockIdx.x * blockDim.x;
     int id_y = threadIdx.y + blockIdx.y * blockDim.y;
@@ -9,45 +28,45 @@ __global__ void transpose_v1(float* output, float* input, int nx, int ny){
     output[id_x * ny + id_y] = input[id_y * nx + id_x];
 }
 
-void call_v1(float* d_output, float* d_input, int nx, int ny){
-    dim3 blockSize(16, 16);
-    dim3 gridSize((nx + blockSize.x - 1) / blockSize.x, (ny + blockSize.y - 1) / blockSize.y);
-    transpose_v1<<<gridSize, blockSize>>>(d_output, d_input, nx, ny);
-}
 
+template <const int BDIM, const int BDIN>
+__global__ void transpose_v2(float* output, float* input, int nx, int ny) {
 
-template <const int SUBX, const int SUBY>
-__global__ void transpose_v2(float* output, float* input, int nx, int ny){
-
-    __shared__ float tile[SUBY][SUBX];
+    __shared__ float tile[BDIN][BDIM];
 
     int id_x = threadIdx.x + blockIdx.x * blockDim.x;
-    int id_y = threadIdx.y + blockIdx.y * blockDim.y;   
+    int id_y = threadIdx.y + blockIdx.y * blockDim.y;
     int thread_in = id_y * nx + id_x;
 
-    // 一个block内的二维坐标转化为一维坐标
     int bidx = threadIdx.y * blockDim.x + threadIdx.x;
-    // 把这个一维的坐标重排成转置后的二维坐标
     int idx_row = bidx / blockDim.y;
     int idx_col = bidx % blockDim.y;
 
-    // 转置后矩阵的坐标
-    id_x = idx_col + blockIdx.y * blockDim.y;
-    id_y = idx_row + blockIdx.x * blockDim.x;
+    // 转置后 block 对换位置
+    int trans_x = blockIdx.y * blockDim.y + idx_col;
+    int trans_y = blockIdx.x * blockDim.x + idx_row;
+    int thread_out = trans_y * ny + trans_x;
 
-    int thread_out = id_y * ny + id_x;
-
-    if (id_x < nx && id_y < ny){
+    if (id_x < nx && id_y < ny) {
         tile[threadIdx.y][threadIdx.x] = input[thread_in];
-        
-        __syncthreads();
+    }
 
+    __syncthreads();
+
+    if (trans_x < ny && trans_y < nx) {
         output[thread_out] = tile[idx_col][idx_row];
     }
 }
 
+
+void call_v1(float* d_output, float* d_input, int nx, int ny){
+    dim3 blockSize(32, 16);
+    dim3 gridSize((nx + blockSize.x - 1) / blockSize.x, (ny + blockSize.y - 1) / blockSize.y);
+    transpose_v1<<<gridSize, blockSize>>>(d_output, d_input, nx, ny);
+}
+
 void call_v2(float* d_output, float* d_input, int nx, int ny){
-    dim3 blockSize(16, 16);
+    dim3 blockSize(32, 16);
     dim3 gridSize((nx + blockSize.x - 1) / blockSize.x, (ny + blockSize.y) / blockSize.y);
 
     transpose_v2<32, 16><<<gridSize, blockSize>>>(d_output, d_input, nx, ny);
@@ -81,7 +100,7 @@ float* v1_time(int nx, int ny){
         call_v1(d_output, d_input, nx, ny);        
     }
 
-    int repeat_time = 10;
+    int repeat_time = 20;
 
     cudaEvent_t start, end;
     cudaEventCreate(&start);
@@ -135,7 +154,7 @@ float* v2_time(int nx, int ny){
         call_v2(d_output, d_input, nx, ny);        
     }
 
-    int repeat_time = 10;
+    int repeat_time = 20;
 
     cudaEvent_t start, end;
     cudaEventCreate(&start);
@@ -172,15 +191,22 @@ bool isMatch(float* a, float* b, int elemCount){
 }
 
 int main(){
-    int nx = 4096, ny = 4096;
+    int nx = 1024, ny = 512;
     int numBytes = nx * ny * sizeof(float);
+
+    float* cpu_output = (float*)malloc(numBytes);    
     float* v1_output = (float*)malloc(numBytes);
     float* v2_output = (float*)malloc(numBytes);
+
+    cpu_output = transpose_cpu(cpu_output, nx, ny);
     v1_output = v1_time(nx, ny);
     v2_output = v2_time(nx, ny);
 
-    if (isMatch(v1_output, v2_output, nx * ny)){
+    if (isMatch(cpu_output, v2_output, nx * ny)){
         std::cout << "Results Match!" << std::endl;
+    }
+    else{
+        std::cout << "Results not Match!" << std::endl;
     }
 }
 

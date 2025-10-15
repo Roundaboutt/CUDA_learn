@@ -29,16 +29,21 @@ __global__ void transpose_v1(float* output, float* input, int nx, int ny){
 }
 
 
-template <const int BDIM, const int BDIN>
+// 共享显存优化
+template <const int BDIMX, const int BDIMY>
 __global__ void transpose_v2(float* output, float* input, int nx, int ny) {
 
-    __shared__ float tile[BDIN][BDIM];
+    __shared__ float tile[BDIMY][BDIMX];
 
+    // 线程在整个矩阵中的二维坐标
     int id_x = threadIdx.x + blockIdx.x * blockDim.x;
     int id_y = threadIdx.y + blockIdx.y * blockDim.y;
+    // 线程在整个矩阵中的索引(input)
     int thread_in = id_y * nx + id_x;
 
+    // 线程在一个block内的索引
     int bidx = threadIdx.y * blockDim.x + threadIdx.x;
+    // 线程在一个block内的二维坐标
     int idx_row = bidx / blockDim.y;
     int idx_col = bidx % blockDim.y;
 
@@ -47,12 +52,14 @@ __global__ void transpose_v2(float* output, float* input, int nx, int ny) {
     int trans_y = blockIdx.x * blockDim.x + idx_row;
     int thread_out = trans_y * ny + trans_x;
 
+    // input -> tile
     if (id_x < nx && id_y < ny) {
         tile[threadIdx.y][threadIdx.x] = input[thread_in];
     }
 
     __syncthreads();
 
+    // tile -> output
     if (trans_x < ny && trans_y < nx) {
         output[thread_out] = tile[idx_col][idx_row];
     }
@@ -60,22 +67,21 @@ __global__ void transpose_v2(float* output, float* input, int nx, int ny) {
 
 
 void call_v1(float* d_output, float* d_input, int nx, int ny){
-    dim3 blockSize(32, 16);
+    dim3 blockSize(8, 32);
     dim3 gridSize((nx + blockSize.x - 1) / blockSize.x, (ny + blockSize.y - 1) / blockSize.y);
     transpose_v1<<<gridSize, blockSize>>>(d_output, d_input, nx, ny);
 }
 
 void call_v2(float* d_output, float* d_input, int nx, int ny){
-    dim3 blockSize(32, 16);
+    dim3 blockSize(8, 32);
     dim3 gridSize((nx + blockSize.x - 1) / blockSize.x, (ny + blockSize.y) / blockSize.y);
 
-    transpose_v2<32, 16><<<gridSize, blockSize>>>(d_output, d_input, nx, ny);
+    transpose_v2<8, 32><<<gridSize, blockSize>>>(d_output, d_input, nx, ny);
 
 }
 
 
-
-float* v1_time(int nx, int ny){
+float* v1_time(int nx, int ny, int warmup, int repeat_time){
 
     int elemCount = nx * ny;
     int numBytes = elemCount * sizeof(float);
@@ -95,12 +101,10 @@ float* v1_time(int nx, int ny){
 
     cudaMemcpy(d_input, h_input, numBytes, cudaMemcpyHostToDevice);
 
-    int warmup = 10;
     for (int i = 0; i < warmup; i++){
         call_v1(d_output, d_input, nx, ny);        
     }
 
-    int repeat_time = 20;
 
     cudaEvent_t start, end;
     cudaEventCreate(&start);
@@ -129,7 +133,7 @@ float* v1_time(int nx, int ny){
     return h_output;  
 }
 
-float* v2_time(int nx, int ny){
+float* v2_time(int nx, int ny, int warmup, int repeat_time){
     
     int elemCount = nx * ny;
     int numBytes = elemCount * sizeof(float);
@@ -149,12 +153,10 @@ float* v2_time(int nx, int ny){
 
     cudaMemcpy(d_input, h_input, numBytes, cudaMemcpyHostToDevice);
 
-    int warmup = 10;
     for (int i = 0; i < warmup; i++){
         call_v2(d_output, d_input, nx, ny);        
     }
 
-    int repeat_time = 20;
 
     cudaEvent_t start, end;
     cudaEventCreate(&start);
@@ -191,7 +193,7 @@ bool isMatch(float* a, float* b, int elemCount){
 }
 
 int main(){
-    int nx = 1024, ny = 512;
+    int nx = 2048, ny = 512;
     int numBytes = nx * ny * sizeof(float);
 
     float* cpu_output = (float*)malloc(numBytes);    
@@ -199,8 +201,8 @@ int main(){
     float* v2_output = (float*)malloc(numBytes);
 
     cpu_output = transpose_cpu(cpu_output, nx, ny);
-    v1_output = v1_time(nx, ny);
-    v2_output = v2_time(nx, ny);
+    v1_output = v1_time(nx, ny, 10, 10);
+    v2_output = v2_time(nx, ny, 10, 10);
 
     if (isMatch(cpu_output, v2_output, nx * ny)){
         std::cout << "Results Match!" << std::endl;

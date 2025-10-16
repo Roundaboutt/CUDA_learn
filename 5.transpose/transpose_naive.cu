@@ -3,7 +3,7 @@
 
 float* transpose_cpu(float* output, int nx, int ny){
 
-    float input[nx * ny];
+    float* input =(float*) malloc(sizeof(float) * nx * ny);
     for (int i = 0; i < nx * ny; i++){
         input[i] = float(i);
     }
@@ -93,16 +93,14 @@ bool isMatch(float* a, float* b, int elemCount){
 }
 
 int main(){
-    int nx = 2048, ny = 512;
+    int nx = 4096, ny = 4096;
     int numBytes = nx * ny * sizeof(float);
 
     float* cpu_output = (float*)malloc(numBytes);    
-    float* v1_output = (float*)malloc(numBytes);
 
     cpu_output = transpose_cpu(cpu_output, nx, ny);
 
-    v1_output = v1_time(nx, ny, 10, 10, 8, 32);
-    v1_output = v1_time(nx, ny, 10, 10, 32, 8);
+    float* v1_output = v1_time(nx, ny, 10, 10, 16, 16);
     if (isMatch(cpu_output, v1_output, nx * ny)){
         std::cout << "Results Match!" << std::endl;
     }

@@ -4,12 +4,12 @@
 #define N 1024*1024*16   // 可以很大
 #define BLOCKSIZE 1024   // 每个 block 最大线程数
 #define FULLMASK 0xFFFFFFFF
-#define WARPSIZE 32
+
 
 __device__ float BlockReduce(float val){
     const int tid = threadIdx.x;
-    const int warpID = tid / WARPSIZE;
-    const int laneID = tid % WARPSIZE;
+    const int warpID = tid / warpSize;
+    const int laneID = tid % warpSize;
 
     // warp内的归约
     for (int offset = warpSize / 2; offset > 0; offset >>= 1){

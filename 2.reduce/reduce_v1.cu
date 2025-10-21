@@ -1,32 +1,52 @@
-#include<iostream>
-#include<chrono>
-#include"cuda_runtime.h"
+#include <iostream>
+#include "cuda_runtime.h"
 
-#define N 1024 * 1024
-#define BLOCKSIZE 1024
+#define N 1024*1024*16   // 可以很大
+#define BLOCKSIZE 1024   // 每个 block 最大线程数
+#define FULLMASK 0xFFFFFFFF
+#define WARPSIZE 32
 
+__device__ float BlockReduce(float val){
+    const int tid = threadIdx.x;
+    const int warpID = tid / WARPSIZE;
+    const int laneID = tid % WARPSIZE;
 
-__global__ void reduce_v1(float* input, float* output){
-    int tid = threadIdx.x;
-    int bid = blockIdx.x;
-    int id = tid + bid * blockDim.x * 2;
+    // warp内的归约
+    for (int offset = warpSize / 2; offset > 0; offset >>= 1){
+        val += __shfl_down_sync(FULLMASK, val, offset);
+    }
 
-    __shared__ float shared[BLOCKSIZE];
-
-    shared[tid] = input[id] + input[id + blockDim.x];
-
+    // 共享显存用来存储每个warp的归约结果
+    __shared__ float warpShared[32];
+    if (laneID == 0)
+        warpShared[warpID] = val;
+    
     __syncthreads();
 
-    for (int s = 1; s < blockDim.x; s <<= 1){
-        if (tid % (2 * s) == 0){
-            shared[tid] += shared[tid + s];
+
+    // 用0号warp来归约整个共享显存(即warp间的归约)
+    if (warpID == 0){
+        val = warpShared[laneID];
+        for (int offset = warpSize / 2; offset > 0; offset >>= 1){
+            val += __shfl_down_sync(FULLMASK, val, offset);
         }
-        __syncthreads();
     }
 
-    if (tid == 0){
-        output[bid] = shared[0];
+    return val;
+}
+
+__global__ void reduce_v1(float* input, float* output, int n){
+    const int global_id = threadIdx.x + blockDim.x * blockIdx.x;
+    
+    float sum = 0.f;
+    for (int i = global_id; i < n; i += blockDim.x * gridDim.x){
+        sum += input[i];
     }
+
+    sum = BlockReduce(sum);
+
+    if (threadIdx.x == 0)
+        output[blockIdx.x] = sum;
 }
 
 float reduce_cpu(float* input){
@@ -38,8 +58,6 @@ float reduce_cpu(float* input){
 }
 
 int main(){
-    const int num_blocks = ((N + BLOCKSIZE - 1) / BLOCKSIZE) / 2;
-
     const int elemCount = N;
     const int numBytes = N * sizeof(float);
 
@@ -48,41 +66,41 @@ int main(){
     for (int i = 0;i < elemCount; i++){
         h_input[i] = 1.0f;
     }
-    
-    auto cpu_start = std::chrono::high_resolution_clock::now();
+
     float cpu_res = reduce_cpu(h_input);
-    auto cpu_end = std::chrono::high_resolution_clock::now();    
-    std::chrono::duration<double, std::milli> cpu_time = cpu_end - cpu_start;
 
-    std::cout<<"cpu result:"<<cpu_res<<std::endl;
-    std::cout<<"cpu time:"<<cpu_time.count()<<"ms"<<std::endl;
-
-    float* d_input,* d_output,* d_final_res;
+    // GPU
+    float *d_input,* d_output;
     float gpu_res;
     cudaMalloc((void**)&d_input, numBytes);
     cudaMalloc((void**)&d_output, numBytes);
-    cudaMalloc((void**)&d_final_res, sizeof(float));
 
     cudaMemcpy(d_input, h_input, numBytes, cudaMemcpyHostToDevice);
 
-    cudaEvent_t start, stop;
-    cudaEventCreate(&start);
-    cudaEventCreate(&stop);
+    int threads = BLOCKSIZE;
+    int n = N;
+    int blocks = (n + threads * 2 - 1) / (threads * 2);
+    float* d_in = d_input;
+    float* d_out = d_output;
 
-    cudaEventRecord(start);
-    reduce_v1<<<num_blocks, BLOCKSIZE>>>(d_input, d_output);
-    reduce_v1<<<1, num_blocks>>>(d_output, d_final_res);
-    cudaEventRecord(stop);
+    // 逐层归约
+    while (blocks > 1){
+        reduce_v1<<<blocks, threads>>>(d_in, d_out, n);
+        cudaDeviceSynchronize();
 
-    cudaEventSynchronize(stop);
+        n = blocks;
+        blocks = (n + threads * 2 - 1) / (threads * 2);
 
-    float gpu_time = 0;
-    cudaEventElapsedTime(&gpu_time, start, stop);
+        // 交换 in/out
+        float* tmp = d_in;
+        d_in = d_out;
+        d_out = tmp;
+    }
 
-    cudaMemcpy(&gpu_res, d_final_res, sizeof(float), cudaMemcpyDeviceToHost);
+    // 最后一层
+    reduce_v1<<<1, threads>>>(d_in, d_out, n);
 
-    std::cout<<"gpu result:"<<gpu_res<<std::endl;
-    std::cout<<"gpu time:"<<gpu_time<<"ms"<<std::endl;
+    cudaMemcpy(&gpu_res, d_out, sizeof(float), cudaMemcpyDeviceToHost);
 
     if (abs(cpu_res - gpu_res) < 1e-5) {
         std::cout << "Result verified successfully!" << std::endl;
@@ -92,8 +110,5 @@ int main(){
 
     cudaFree(d_input);
     cudaFree(d_output);
-    cudaFree(d_final_res);
-
     free(h_input);
-    
 }

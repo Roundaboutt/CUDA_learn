@@ -4,7 +4,7 @@
 
 float* transpose_cpu(float* output, int nx, int ny){
 
-    float input[nx * ny];
+    float* input = (float*)malloc(sizeof(float) * nx * ny);
     for (int i = 0; i < nx * ny; i++){
         input[i] = float(i);
     }
@@ -19,33 +19,32 @@ float* transpose_cpu(float* output, int nx, int ny){
 }
 
 
-#define FETCH_FLOAT4(pointer) (reinterpret_cast<float4*>(&(pointer))[0])
+#define FETCH_FLOAT2(pointer) (reinterpret_cast<float2*>(&(pointer))[0])
 template <const int THREAD_SIZE_Y, const int THREAD_SIZE_X>
 __global__ void transpose_v2(float* output, float* input, int M, int N){
-    float src[4][4];
-    float dst[4][4];
-    
-    float* input_start = input + THREAD_SIZE_Y * blockIdx.y * N + THREAD_SIZE_X * blockIdx.x;
-    for (int i = 0; i < 4; i++){
-        FETCH_FLOAT4(src[i]) = FETCH_FLOAT4(input_start[(threadIdx.y * 4 + i) * N + threadIdx.x * 4]);
+    float src[2][2];
+    float dst[2][2];
+
+    float* input_start = input + blockIdx.y * THREAD_SIZE_Y * N + blockIdx.x * THREAD_SIZE_X;
+
+    for (int i = 0; i < 2; i++){
+        FETCH_FLOAT2(src[i]) = FETCH_FLOAT2(input_start[(threadIdx.y * 2 + i) * N + threadIdx.x * 2]);
     }
 
-    FETCH_FLOAT4(dst[0]) = make_float4(src[0][0], src[1][0], src[2][0], src[3][0]);
-    FETCH_FLOAT4(dst[1]) = make_float4(src[0][1], src[1][1], src[2][1], src[3][1]);
-    FETCH_FLOAT4(dst[2]) = make_float4(src[0][2], src[1][2], src[2][2], src[3][2]);
-    FETCH_FLOAT4(dst[3]) = make_float4(src[0][3], src[1][3], src[2][3], src[3][3]);
-
-    float* output_start = output + THREAD_SIZE_X * blockIdx.x * M + THREAD_SIZE_Y * blockIdx.y;
-    for (int i = 0; i < 4; i++){
-        FETCH_FLOAT4(output_start[(threadIdx.x * 4 + i) * M + threadIdx.y * 4]) = FETCH_FLOAT4(dst[i]);
+    FETCH_FLOAT2(dst[0]) = make_float2(src[0][0], src[1][0]);
+    FETCH_FLOAT2(dst[1]) = make_float2(src[0][1], src[1][1]);
+    
+    float* output_start = output + blockIdx.x * THREAD_SIZE_X * M + blockIdx.y * THREAD_SIZE_Y;
+    for (int i = 0; i < 2; i++){
+        FETCH_FLOAT2(output_start[(threadIdx.x * 2 + i) * M + threadIdx.y * 2]) = FETCH_FLOAT2(dst[i]); 
     }
 }
 
 template <const int BLKDIM_x, const int BLKDIM_y> 
 void call_v2(float* d_output, float* d_input, int M, int N){
     dim3 blockSize(BLKDIM_x, BLKDIM_y);  // 每个线程块有 32x8 = 256 个线程
-    constexpr int THREAD_SIZE_X = BLKDIM_x * 4;  // 每个 block 处理 128 列
-    constexpr int THREAD_SIZE_Y = BLKDIM_y * 4;  // 每个 block 处理 32 行
+    constexpr int THREAD_SIZE_X = BLKDIM_x * 2;  // 每个 block 处理 128 列
+    constexpr int THREAD_SIZE_Y = BLKDIM_y * 2;  // 每个 block 处理 32 行
 
     dim3 gridSize(
         (N + THREAD_SIZE_X - 1) / THREAD_SIZE_X,

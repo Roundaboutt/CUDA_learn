@@ -127,7 +127,7 @@ bool isMatch(float* a, float* b, int elemCount){
 }
 
 int main(){
-    int M = 4096, N = 4096;
+    int M = 512, N = 2048;
     int numBytes = M * N * sizeof(float);
 
 

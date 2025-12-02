@@ -1,0 +1,32 @@
+[
+{
+  "directory": "/home/a1097/Project/cuda_learn/build",
+  "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -g \"--generate-code=arch=compute_75,code=[compute_75,sm_75]\" -x cu -c /home/a1097/Project/cuda_learn/1.softmax/softmax_kernelv2.cu -o 1.softmax/CMakeFiles/softmax_kernelv2.dir/softmax_kernelv2.cu.o",
+  "file": "/home/a1097/Project/cuda_learn/1.softmax/softmax_kernelv2.cu",
+  "output": "/home/a1097/Project/cuda_learn/build/1.softmax/CMakeFiles/softmax_kernelv2.dir/softmax_kernelv2.cu.o"
+},
+{
+  "directory": "/home/a1097/Project/cuda_learn/build",
+  "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -g \"--generate-code=arch=compute_75,code=[compute_75,sm_75]\" -x cu -c /home/a1097/Project/cuda_learn/1.softmax/softmax_kernel.cu -o 1.softmax/CMakeFiles/softmax_kernel.dir/softmax_kernel.cu.o",
+  "file": "/home/a1097/Project/cuda_learn/1.softmax/softmax_kernel.cu",
+  "output": "/home/a1097/Project/cuda_learn/build/1.softmax/CMakeFiles/softmax_kernel.dir/softmax_kernel.cu.o"
+},
+{
+  "directory": "/home/a1097/Project/cuda_learn/build",
+  "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -g \"--generate-code=arch=compute_75,code=[compute_75,sm_75]\" -x cu -c /home/a1097/Project/cuda_learn/1.softmax/shuffle.cu -o 1.softmax/CMakeFiles/shuffle.dir/shuffle.cu.o",
+  "file": "/home/a1097/Project/cuda_learn/1.softmax/shuffle.cu",
+  "output": "/home/a1097/Project/cuda_learn/build/1.softmax/CMakeFiles/shuffle.dir/shuffle.cu.o"
+},
+{
+  "directory": "/home/a1097/Project/cuda_learn/build",
+  "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -g \"--generate-code=arch=compute_75,code=[compute_75,sm_75]\" -x cu -c /home/a1097/Project/cuda_learn/5.transpose/transpose_naive.cu -o 5.transpose/CMakeFiles/transpose_naive.dir/transpose_naive.cu.o",
+  "file": "/home/a1097/Project/cuda_learn/5.transpose/transpose_naive.cu",
+  "output": "/home/a1097/Project/cuda_learn/build/5.transpose/CMakeFiles/transpose_naive.dir/transpose_naive.cu.o"
+},
+{
+  "directory": "/home/a1097/Project/cuda_learn/build",
+  "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -g \"--generate-code=arch=compute_75,code=[compute_75,sm_75]\" -x cu -c /home/a1097/Project/cuda_learn/5.transpose/transpose_float4.cu -o 5.transpose/CMakeFiles/transpose_float4.dir/transpose_float4.cu.o",
+  "file": "/home/a1097/Project/cuda_learn/5.transpose/transpose_float4.cu",
+  "output": "/home/a1097/Project/cuda_learn/build/5.transpose/CMakeFiles/transpose_float4.dir/transpose_float4.cu.o"
+}
+]

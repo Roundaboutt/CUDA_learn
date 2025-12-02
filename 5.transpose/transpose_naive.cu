@@ -19,8 +19,8 @@ float* transpose_cpu(float* output, int nx, int ny){
 
 
 __global__ void transpose_v1(float* output, float* input, int nx, int ny){
-    int id_x = threadIdx.x + blockIdx.x * blockDim.x;
-    int id_y = threadIdx.y + blockIdx.y * blockDim.y;
+    const int id_x = threadIdx.x + blockDim.x * blockIdx.x;
+    const int id_y = threadIdx.y + blockDim.y * blockIdx.y;
 
     if (id_x >= nx || id_y >= ny) return;
     output[id_x * ny + id_y] = input[id_y * nx + id_x];
@@ -100,11 +100,20 @@ int main(){
 
     cpu_output = transpose_cpu(cpu_output, nx, ny);
 
-    float* v1_output = v1_time(nx, ny, 10, 10, 16, 16);
-    if (isMatch(cpu_output, v1_output, nx * ny)){
-        std::cout << "Results Match!" << std::endl;
+    float* v1_output1 = v1_time(nx, ny, 10, 10, 8, 32);
+    float* v1_output2 = v1_time(nx, ny, 10, 10, 32, 8);
+
+    if (isMatch(cpu_output, v1_output1, nx * ny)){
+        std::cout << "Results1 Match!" << std::endl;
     }
     else{
-        std::cout << "Results not Match!" << std::endl;
+        std::cout << "Results1 not Match!" << std::endl;
+    }
+
+    if (isMatch(cpu_output, v1_output2, nx * ny)){
+        std::cout << "Results2 Match!" << std::endl;
+    }
+    else{
+        std::cout << "Results2 not Match!" << std::endl;
     }
 }

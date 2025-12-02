@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 4.0)
+project(cuda_learn)
+enable_language(CUDA)
+enable_language(CXX)
+add_subdirectory(1.softmax)
+add_subdirectory(5.transpose)

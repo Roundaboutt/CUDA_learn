@@ -24,9 +24,12 @@ template <const int THREAD_SIZE_Y, const int THREAD_SIZE_X>
 __global__ void transpose_v2(float* output, float* input, int M, int N){
     float src[4][4];
     float dst[4][4];
-    
-    float* input_start = input + THREAD_SIZE_Y * blockIdx.y * N + THREAD_SIZE_X * blockIdx.x;
-    for (int i = 0; i < 4; i++){
+
+    float* input_start = input + blockIdx.y * N * THREAD_SIZE_Y + blockIdx.x * THREAD_SIZE_X;
+
+#pragma unroll    
+    for (int i = 0; i < 4; i++)
+    {
         FETCH_FLOAT4(src[i]) = FETCH_FLOAT4(input_start[(threadIdx.y * 4 + i) * N + threadIdx.x * 4]);
     }
 
@@ -35,10 +38,13 @@ __global__ void transpose_v2(float* output, float* input, int M, int N){
     FETCH_FLOAT4(dst[2]) = make_float4(src[0][2], src[1][2], src[2][2], src[3][2]);
     FETCH_FLOAT4(dst[3]) = make_float4(src[0][3], src[1][3], src[2][3], src[3][3]);
 
-    float* output_start = output + THREAD_SIZE_X * blockIdx.x * M + THREAD_SIZE_Y * blockIdx.y;
-    for (int i = 0; i < 4; i++){
+    float* output_start = output + blockIdx.x * M * THREAD_SIZE_X + blockIdx.y * THREAD_SIZE_Y;
+
+#pragma unroll
+    for (int i = 0; i < 4; i++)
+    {
         FETCH_FLOAT4(output_start[(threadIdx.x * 4 + i) * M + threadIdx.y * 4]) = FETCH_FLOAT4(dst[i]);
-    }
+    }    
 }
 
 template <const int BLKDIM_x, const int BLKDIM_y> 

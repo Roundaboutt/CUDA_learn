@@ -33,57 +33,67 @@ __device__ float BlockReduce(float val){
 }
 
 __global__ void rmsnorm_v2(float* input, float* output, int batch, int size, float* weight, float eps){
-    const int bid = blockIdx.x;
     const int tid = threadIdx.x;
+    const int bid = blockIdx.x;
 
-    if  (bid >= batch) return;
-    
-    float* input_start = input + size * bid;
-    float* output_start = output + size * bid;
+    if (bid >= batch) return;
 
     constexpr int pack_size = 4;
     const int pack_num = size / pack_size;
-    // 剩余部分:(pack_off, size)
     const int pack_off = pack_num * pack_size;
 
+    float* input_start = input + size * bid;
+    float* output_start = output + size * bid;
+
     float sum = 0.f;
-    float4* in_pack = reinterpret_cast<float4*>(input_start);
-    for (int i = tid; i < pack_num; i += blockDim.x){
-        float4 in_float4 = *(in_pack + i);
-        sum += in_float4.x * in_float4.x;
-        sum += in_float4.y * in_float4.y;
-        sum += in_float4.z * in_float4.z;
-        sum += in_float4.w * in_float4.w;
+    float4* input_pack = reinterpret_cast<float4*> (input_start);
+    #pragma unroll
+    for (int i = tid; i < pack_num; i += blockDim.x)
+    {
+        float4 in = *(input_pack + i);
+        sum += in.x * in.x ;
+        sum += in.y * in.y ;
+        sum += in.z * in.z ;
+        sum += in.w * in.w ;
     }
 
-    for (int i = pack_off + tid; i < size; i += blockDim.x){
+    #pragma unroll
+    for (int i = tid + pack_off; i < size; i += blockDim.x)
+    {
         sum += input_start[i] * input_start[i];
     }
 
     sum = BlockReduce(sum);
-    __shared__ float shared_val;
-    if (tid == 0) shared_val = sum;
 
+    __shared__ float shared_sum;
+    if (tid == 0)
+        shared_sum = sum;
     __syncthreads();
 
-    sum = shared_val;
+    sum = shared_sum;
 
-    const float scale = rsqrtf(sum / static_cast<float>(size) + eps);
-    float4* out_pack = reinterpret_cast<float4*>(output_start);
-    float4* wei_pack = reinterpret_cast<float4*>(weight);
-    for (int i = tid; i < pack_num; i += blockDim.x){
-        float4 wei_float4 = *(wei_pack + i);
-        float4 in_float4 = *(in_pack + i);
+    float scale = rsqrtf(sum / static_cast<float> (size) + eps);
 
-        *(out_pack + i)= make_float4(
-            scale * wei_float4.x * in_float4.x,
-            scale * wei_float4.y * in_float4.y,
-            scale * wei_float4.z * in_float4.z,
-            scale * wei_float4.w * in_float4.w
-        );
+    float4* output_pack = reinterpret_cast<float4*> (output_start);
+    float4* weight_pack = reinterpret_cast<float4*> (weight);
+
+    #pragma unroll
+    for (int i = tid; i < pack_num; i += blockDim.x)
+    {
+        float4 out;
+        float4 in = *(input_pack + i);
+        float4 wei = *(weight_pack + i);
+        out.x = scale * wei.x * in.x;
+        out.y = scale * wei.y * in.y;
+        out.z = scale * wei.z * in.z;
+        out.w = scale * wei.w * in.w;
+
+        *(output_pack + i) = out;
     }
 
-    for (int i = pack_off + tid; i < size; i += blockDim.x){
+    #pragma unroll
+    for (int i = tid + pack_off; i < size; i += blockDim.x)
+    {
         output_start[i] = scale * weight[i] * input_start[i];
     }
 }
@@ -118,11 +128,11 @@ void rmsnorm_cpu(float* input, float* output, int batch, int size, float* weight
 
 
 int main(){
-    const int batch = 16;
-    const int size = 1024;
-    const float eps = 1e-6;
-    const int elemCount = batch * size;
-    const int numBytes = elemCount * sizeof(float);
+    constexpr int batch = 16;
+    constexpr int size = 1024;
+    constexpr float eps = 1e-6;
+    constexpr int elemCount = batch * size;
+    constexpr int numBytes = elemCount * sizeof(float);
 
     float* h_input,* h_output_cpu,* h_output_gpu,* h_weight;
     h_input = (float*)malloc(numBytes);

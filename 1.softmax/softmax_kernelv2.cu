@@ -26,56 +26,151 @@ void cpu_kernel(float* input, float* output, int row, int col){
     }
 }
 
+#define FULLMASK 0xFFFFFFFF
 
-__global__ void softmax_kernel(float* input, float* output, int row, int col){
-    extern __shared__ float shared[];
-    int tid = threadIdx.x;
-    int bid = blockIdx.x;
+__device__ __inline__ float MaxReduce(float val)
+{   
+    const int tid = threadIdx.x;
+    const int warpID = tid / warpSize;
+    const int laneID = tid % warpSize;
 
-    float* input_row = input + col * bid;
+    #pragma unroll
+    for (int offset = warpSize / 2; offset > 0; offset >>= 1)
+        val  = fmaxf(val, __shfl_down_sync(FULLMASK, val, offset));
 
-    float maxval = -INFINITY;
-    for (int i = tid; i < col; i += blockDim.x){
-        maxval = fmaxf(maxval, input[i]);
-    }
-    
-    // 把每个线程负责的所有元素中的最大值写入共享显存
-    shared[tid] = maxval;
+    __shared__ float shared[32];
+    if (laneID == 0)
+        shared[warpID] = val;
     __syncthreads();
 
-    for (int s = blockDim.x / 2; s > 0; s >>= 1){
-        
-        __syncthreads();
-        if (tid < s){
-            shared[tid] = fmaxf(shared[tid], shared[tid + s]);            
-        }
+    if (warpID == 0)
+    {
+        val = shared[laneID];
 
+        #pragma unroll
+        for (int offset = warpSize / 2; offset > 0; offset >>= 1)
+            val = fmaxf(val, __shfl_down_sync(FULLMASK, val, offset));
     }
 
+    return val;
+}
+
+__device__ __inline__ float SumReduce(float val)
+{
+    const int tid = threadIdx.x;
+    const int warpID = tid / warpSize;
+    const int laneID = tid % warpSize;
+
+    #pragma unroll
+    for (int offset = warpSize / 2; offset > 0; offset >>= 1)
+        val  += __shfl_down_sync(FULLMASK, val, offset);
+
+    __shared__ float shared[32];
+    if (laneID == 0)
+        shared[warpID] = val;
     __syncthreads();
 
-    float offset = shared[0];
-    float* output_row = output + col * bid;
-    float sumval = 0.0f;
-    for (int i = tid; i < col; i += blockDim.x){
-        output_row[i] = expf(input_row[i] - offset);
-        sumval += output_row[i];
-    }
-    shared[tid] = sumval;
+    if (warpID == 0)
+    {
+        val = shared[laneID];
 
+        #pragma unroll
+        for (int offset = warpSize / 2; offset > 0; offset >>= 1)
+            val += __shfl_down_sync(FULLMASK, val, offset);
+    }
+
+    return val;
+}
+
+
+__global__ void softmax_kernel(float* input, float* output, int row, int col)
+{
+    const int tid = threadIdx.x;
+    const int bid = blockIdx.x;
+
+    float* input_start = input + col * bid;
+    float* output_start = output + col * bid;
+
+    constexpr int pack_size = 4;
+    const int pack_num = col / pack_size;
+    const int pack_off = pack_num * pack_size;
+
+    float max = -INFINITY;
+    float4* input_pack = reinterpret_cast<float4*> (input_start);
+
+    #pragma unroll
+    for (int i = tid; i < pack_num; i += blockDim.x)
+    {
+        float4 in = *(input_pack + i);
+        max = fmaxf(max, in.x);
+        max = fmaxf(max, in.y);
+        max = fmaxf(max, in.z);
+        max = fmaxf(max, in.w);
+    }
+
+    #pragma unroll
+    for (int i = tid + pack_off; i < col; i += blockDim.x)
+    {
+        max = fmaxf(max, input_start[i]);
+    }
+
+    max = MaxReduce(max);
+
+    __shared__ float shared_max;
+    if (tid == 0)
+        shared_max = max;
     __syncthreads();
-    
-    for (int s = blockDim.x / 2; s > 0; s >>= 1){
-        __syncthreads();
-        if (tid < s){
-            shared[tid] += shared[tid + s];
-        }
+
+    max = shared_max;
+
+    float sum = 0.f;
+
+    #pragma unroll
+    for (int i = tid; i < pack_num; i += blockDim.x)
+    {
+        float4 in = *(input_pack + i);
+        sum += expf(in.x - max);
+        sum += expf(in.y - max);
+        sum += expf(in.z - max);
+        sum += expf(in.w - max);
     }
 
-    float sum = shared[0];
 
-    for (int i = tid; i < col; i += blockDim.x){
-        output_row[i] /= sum;
+    #pragma unroll
+    for (int i = tid + pack_off; i < col; i += blockDim.x)
+    {
+        sum += expf(input_start[i] - max);
+    }
+
+
+    sum = SumReduce(sum);
+
+    __shared__ float shared_sum;
+    if (tid == 0)
+        shared_sum = sum;
+    __syncthreads();
+    sum = shared_sum;
+
+    float scale = 1.0 / sum;
+    float4* output_pack = reinterpret_cast<float4*> (output_start);
+
+    #pragma unroll
+    for (int i = tid; i < pack_num; i += blockDim.x)
+    {
+        float4 out;
+        float4 in = *(input_pack + i);
+        out.x = scale * expf(in.x - max);
+        out.y = scale * expf(in.y - max);
+        out.z = scale * expf(in.z - max);
+        out.w = scale * expf(in.w - max);
+
+        *(output_pack + i) = out;
+    }
+
+    #pragma unroll
+    for (int i = tid + pack_off; i < col; i += blockDim.x)
+    {
+        output_start[i] = scale * expf(input_start[i] - max);
     }
 
 }
@@ -94,10 +189,10 @@ bool compare(float* h_output, float* d_output, const int elemCount){
 
 
 int main(){
-    int row = 1024 * 20;
-    int col = 16384;
-    size_t elemCount = row * col;
-    size_t numBytes = elemCount * sizeof(float);
+    constexpr int row = 1024 * 20;
+    constexpr int col = 16384;
+    constexpr size_t elemCount = row * col;
+    constexpr size_t numBytes = elemCount * sizeof(float);
 
     float* h_input = (float*)malloc(numBytes);
     float* h_output = (float*)malloc(numBytes);
@@ -120,15 +215,15 @@ int main(){
     cudaMalloc((void**)&d_output, numBytes);
     cudaMemcpy(d_input, h_input, numBytes, cudaMemcpyHostToDevice);
 
-    int blockSize = 1024;
-    int numBlocks = row;
+    constexpr int blockSize = 1024;
+    constexpr int numBlocks = row;
 
     cudaEvent_t start, end;
     cudaEventCreate(&start);
     cudaEventCreate(&end);
 
     cudaEventRecord(start);
-    softmax_kernel<<<numBlocks, blockSize, blockSize * sizeof(float)>>>(d_input, d_output, row, col);
+    softmax_kernel<<<numBlocks, blockSize>>>(d_input, d_output, row, col);
     cudaEventRecord(end);
 
     cudaEventSynchronize(end);

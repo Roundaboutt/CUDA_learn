@@ -9,21 +9,26 @@ __device__ float BlockReduce(float val){
     const int warpID = tid / warpSize;
     const int laneID = tid % warpSize;
 
-    for (int offset = warpSize / 2; offset > 0; offset >>= 1){
+#pragma unroll      
+    for (int offset = warpSize / 2; offset > 0; offset >>= 1)
+    {
         val += __shfl_down_sync(FULLMASK, val, offset);
     }
 
     __shared__ float shared[32];
-
-    if (laneID == 0){
+    if (laneID == 0)
+    {
         shared[warpID] = val;
-    }   
+    }
 
     __syncthreads();
 
-    if (warpID == 0){
+    if (warpID == 0)
+    {
         val = shared[laneID];
-        for (int offset = warpSize / 2; offset > 0; offset >>= 1){
+#pragma unroll          
+        for (int offset = warpSize / 2; offset > 0; offset >>= 1)
+        {
             val += __shfl_down_sync(FULLMASK, val, offset);
         }
     }
@@ -32,17 +37,20 @@ __device__ float BlockReduce(float val){
 }
 
 __global__ void reduce_v2(float* input, float* output, int n){
-    const int tid = threadIdx.x;
     const int bid = blockIdx.x;
-    const int global_id = tid + bid * blockDim.x;
+    const int tid = threadIdx.x;
+    const int global_id = tid + blockDim.x * bid;
 
-    constexpr int packsize = 4;
-    const int pack_num = n / packsize;
-    const int pack_off = pack_num * packsize;
+    const int packSize = 4;
+    const int pack_num = n / packSize;
+    const int pack_off = pack_num * packSize;
 
     float sum = 0.f;
-    float4* input_pack = reinterpret_cast<float4*>(input);
-    for (int i = global_id; i < pack_num; i += blockDim.x * gridDim.x){
+    float4* input_pack = reinterpret_cast<float4*> (input);
+
+#pragma unroll   
+    for (int i = global_id; i < pack_num; i += blockDim.x * gridDim.x)
+    {
         float4 in = *(input_pack + i);
         sum += in.x;
         sum += in.y;
@@ -50,15 +58,15 @@ __global__ void reduce_v2(float* input, float* output, int n){
         sum += in.w;
     }
 
-    for (int i = global_id + pack_off; i < n; i += blockDim.x * gridDim.x){
-        sum += input[i] * input[i];
+#pragma unroll  
+    for (int i = global_id + pack_off; i < n; i += blockDim.x * gridDim.x)
+    {
+        sum += input[i];
     }
 
     sum = BlockReduce(sum);
-
     if (tid == 0)
         output[bid] = sum;
-
 }
 
 
@@ -77,7 +85,7 @@ int main(){
     float* h_input = (float*)malloc(numBytes);
 
     for (int i = 0;i < elemCount; i++){
-        h_input[i] = 1.0f;
+        h_input[i] = 2.0f;
     }
 
     float cpu_res = reduce_cpu(h_input);

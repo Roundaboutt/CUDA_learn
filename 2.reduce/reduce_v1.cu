@@ -8,45 +8,41 @@
 
 __device__ float BlockReduce(float val){
     const int tid = threadIdx.x;
+
     const int warpID = tid / warpSize;
     const int laneID = tid % warpSize;
 
-    // warp内的归约
     for (int offset = warpSize / 2; offset > 0; offset >>= 1){
         val += __shfl_down_sync(FULLMASK, val, offset);
     }
 
-    // 共享显存用来存储每个warp的归约结果
-    __shared__ float warpShared[32];
+    __shared__ float shared[32];
     if (laneID == 0)
-        warpShared[warpID] = val;
-    
+        shared[warpID] = val;
     __syncthreads();
 
-
-    // 用0号warp来归约整个共享显存(即warp间的归约)
     if (warpID == 0){
-        val = warpShared[laneID];
+        val = shared[laneID];
         for (int offset = warpSize / 2; offset > 0; offset >>= 1){
             val += __shfl_down_sync(FULLMASK, val, offset);
         }
     }
-
     return val;
 }
 
 __global__ void reduce_v1(float* input, float* output, int n){
-    const int global_id = threadIdx.x + blockDim.x * blockIdx.x;
-    
+    const int tid = threadIdx.x;
+    const int bid = blockIdx.x;
+    const int global_id = tid + bid * blockDim.x;
+
     float sum = 0.f;
     for (int i = global_id; i < n; i += blockDim.x * gridDim.x){
         sum += input[i];
     }
 
     sum = BlockReduce(sum);
-
-    if (threadIdx.x == 0)
-        output[blockIdx.x] = sum;
+    if (tid == 0)
+        output[bid] = sum;
 }
 
 float reduce_cpu(float* input){

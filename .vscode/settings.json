@@ -89,5 +89,6 @@
         "typeinfo": "cpp",
         "variant": "cpp",
         "format": "cpp"
-    }
+    },
+    "cmake.ignoreCMakeListsMissing": true
 }

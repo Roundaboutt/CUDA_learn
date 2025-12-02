@@ -1,0 +1,27 @@
+# ninja log v7
+1	38	1764666828758905535	build.ninja	693db51dda2da00c
+1	38	1764666828758905535	/home/a1097/Project/cuda_learn/build/cmake_install.cmake	693db51dda2da00c
+1	20	1764664049951031265	/home/a1097/Project/cuda_learn/build/0.relu/cmake_install.cmake	693db51dda2da00c
+0	1277	1764664049951031265	1.softmax/CMakeFiles/softmax.dir/softmax_kernelv2.cu.o	c8061dd0cc1e5e6b
+1278	1404	1764664051231031025	1.softmax/softmax	9a62e2910cbf6110
+1	38	1764666828758905535	/home/a1097/Project/cuda_learn/build/1.softmax/cmake_install.cmake	693db51dda2da00c
+1	1218	1764664126447393872	1.softmax/CMakeFiles/shuffle.dir/shuffle.cu.o	c57cc29de0a5438c
+1	1221	1764664126447393872	1.softmax/CMakeFiles/softmax_kernelv2.dir/softmax_kernelv2.cu.o	440326eee22a3f66
+1	1274	1764664126447393872	1.softmax/CMakeFiles/softmax_kernel.dir/softmax_kernel.cu.o	4fd5190654bbbcfc
+1218	1325	1764664127657391296	1.softmax/shuffle	575d8761240c5cc8
+1221	1325	1764664127667391276	1.softmax/softmax_kernelv2	46f17dbd1ca10d58
+1274	1382	1764664127717391169	1.softmax/softmax_kernel	bd0480c8eb0c7fe2
+1	898	1764666514204433963	5.transpose/CMakeFiles/transpose_naive.dir/transpose_naive.cu.o	1e8a9392c242d8e2
+898	1010	1764666515104070360	5.transpose/transpose_naive	52f403060781fe4c
+0	40	1764666828758905535	build.ninja	693db51dda2da00c
+0	40	1764666828758905535	/home/a1097/Project/cuda_learn/build/cmake_install.cmake	693db51dda2da00c
+0	40	1764666828758905535	/home/a1097/Project/cuda_learn/build/1.softmax/cmake_install.cmake	693db51dda2da00c
+0	40	1764666828758905535	/home/a1097/Project/cuda_learn/build/5.transpose/cmake_install.cmake	693db51dda2da00c
+1	1154	1764666828769024501	5.transpose/CMakeFiles/transpose_float4.dir/transpose_float4.cu.o	7dc7124545c86f79
+1154	1285	1764666829922586812	5.transpose/transpose_float4	6cbf5dea7afc50c7
+3	1209	1764668542339503410	5.transpose/CMakeFiles/transpose_float4.dir/transpose_float4.cu.o	7dc7124545c86f79
+1209	1335	1764668543549503182	5.transpose/transpose_float4	6cbf5dea7afc50c7
+1	896	1764668713479449600	5.transpose/CMakeFiles/transpose_float4.dir/transpose_float4.cu.o	7dc7124545c86f79
+896	1047	1764668714369449578	5.transpose/transpose_float4	6cbf5dea7afc50c7
+1	942	1764668760719437123	5.transpose/CMakeFiles/transpose_float4.dir/transpose_float4.cu.o	7dc7124545c86f79
+942	1049	1764668761659438326	5.transpose/transpose_float4	6cbf5dea7afc50c7

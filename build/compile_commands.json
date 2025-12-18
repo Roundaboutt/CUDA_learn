@@ -19,6 +19,30 @@
 },
 {
   "directory": "/home/a1097/Project/cuda_learn/build",
+  "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -g \"--generate-code=arch=compute_75,code=[compute_75,sm_75]\" -x cu -c /home/a1097/Project/cuda_learn/1.softmax/softmax_test.cu -o 1.softmax/CMakeFiles/softmax_test.dir/softmax_test.cu.o",
+  "file": "/home/a1097/Project/cuda_learn/1.softmax/softmax_test.cu",
+  "output": "/home/a1097/Project/cuda_learn/build/1.softmax/CMakeFiles/softmax_test.dir/softmax_test.cu.o"
+},
+{
+  "directory": "/home/a1097/Project/cuda_learn/build",
+  "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -isystem /usr/local/cuda/targets/x86_64-linux/include -isystem /usr/local/cuda/targets/x86_64-linux/include/cccl -g \"--generate-code=arch=compute_75,code=[compute_75,sm_75]\" -x cu -c /home/a1097/Project/cuda_learn/3.matmul/matmul_v1.cu -o 3.matmul/CMakeFiles/matmul_v1.dir/matmul_v1.cu.o",
+  "file": "/home/a1097/Project/cuda_learn/3.matmul/matmul_v1.cu",
+  "output": "/home/a1097/Project/cuda_learn/build/3.matmul/CMakeFiles/matmul_v1.dir/matmul_v1.cu.o"
+},
+{
+  "directory": "/home/a1097/Project/cuda_learn/build",
+  "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -isystem /usr/local/cuda/targets/x86_64-linux/include -isystem /usr/local/cuda/targets/x86_64-linux/include/cccl -g \"--generate-code=arch=compute_75,code=[compute_75,sm_75]\" -x cu -c /home/a1097/Project/cuda_learn/3.matmul/matmul_v2.cu -o 3.matmul/CMakeFiles/matmul_v2.dir/matmul_v2.cu.o",
+  "file": "/home/a1097/Project/cuda_learn/3.matmul/matmul_v2.cu",
+  "output": "/home/a1097/Project/cuda_learn/build/3.matmul/CMakeFiles/matmul_v2.dir/matmul_v2.cu.o"
+},
+{
+  "directory": "/home/a1097/Project/cuda_learn/build",
+  "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -isystem /usr/local/cuda/targets/x86_64-linux/include -isystem /usr/local/cuda/targets/x86_64-linux/include/cccl -g \"--generate-code=arch=compute_75,code=[compute_75,sm_75]\" -x cu -c /home/a1097/Project/cuda_learn/3.matmul/matmul_v3.cu -o 3.matmul/CMakeFiles/matmul_v3.dir/matmul_v3.cu.o",
+  "file": "/home/a1097/Project/cuda_learn/3.matmul/matmul_v3.cu",
+  "output": "/home/a1097/Project/cuda_learn/build/3.matmul/CMakeFiles/matmul_v3.dir/matmul_v3.cu.o"
+},
+{
+  "directory": "/home/a1097/Project/cuda_learn/build",
   "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -g \"--generate-code=arch=compute_75,code=[compute_75,sm_75]\" -x cu -c /home/a1097/Project/cuda_learn/5.transpose/transpose_naive.cu -o 5.transpose/CMakeFiles/transpose_naive.dir/transpose_naive.cu.o",
   "file": "/home/a1097/Project/cuda_learn/5.transpose/transpose_naive.cu",
   "output": "/home/a1097/Project/cuda_learn/build/5.transpose/CMakeFiles/transpose_naive.dir/transpose_naive.cu.o"
@@ -28,5 +52,23 @@
   "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -g \"--generate-code=arch=compute_75,code=[compute_75,sm_75]\" -x cu -c /home/a1097/Project/cuda_learn/5.transpose/transpose_float4.cu -o 5.transpose/CMakeFiles/transpose_float4.dir/transpose_float4.cu.o",
   "file": "/home/a1097/Project/cuda_learn/5.transpose/transpose_float4.cu",
   "output": "/home/a1097/Project/cuda_learn/build/5.transpose/CMakeFiles/transpose_float4.dir/transpose_float4.cu.o"
+},
+{
+  "directory": "/home/a1097/Project/cuda_learn/build",
+  "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -g \"--generate-code=arch=compute_75,code=[compute_75,sm_75]\" -x cu -c /home/a1097/Project/cuda_learn/5.transpose/transpose_shared_memory.cu -o 5.transpose/CMakeFiles/transpose_shared_memory.dir/transpose_shared_memory.cu.o",
+  "file": "/home/a1097/Project/cuda_learn/5.transpose/transpose_shared_memory.cu",
+  "output": "/home/a1097/Project/cuda_learn/build/5.transpose/CMakeFiles/transpose_shared_memory.dir/transpose_shared_memory.cu.o"
+},
+{
+  "directory": "/home/a1097/Project/cuda_learn/build",
+  "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -g \"--generate-code=arch=compute_75,code=[compute_75,sm_75]\" -x cu -c /home/a1097/Project/cuda_learn/2.reduce/reduce_test.cu -o 2.reduce/CMakeFiles/reduce_test.dir/reduce_test.cu.o",
+  "file": "/home/a1097/Project/cuda_learn/2.reduce/reduce_test.cu",
+  "output": "/home/a1097/Project/cuda_learn/build/2.reduce/CMakeFiles/reduce_test.dir/reduce_test.cu.o"
+},
+{
+  "directory": "/home/a1097/Project/cuda_learn/build",
+  "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -g \"--generate-code=arch=compute_75,code=[compute_75,sm_75]\" -x cu -c /home/a1097/Project/cuda_learn/6.RMSNorm/RMSNorm_test.cu -o 6.RMSNorm/CMakeFiles/RMSNorm_test.dir/RMSNorm_test.cu.o",
+  "file": "/home/a1097/Project/cuda_learn/6.RMSNorm/RMSNorm_test.cu",
+  "output": "/home/a1097/Project/cuda_learn/build/6.RMSNorm/CMakeFiles/RMSNorm_test.dir/RMSNorm_test.cu.o"
 }
 ]

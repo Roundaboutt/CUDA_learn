@@ -45,7 +45,7 @@ cmake_ninja_workdir = /home/a1097/Project/cuda_learn/build/
 # Utility command for edit_cache
 
 build CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/a1097/Project/cuda_learn/build && /usr/local/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  COMMAND = cd /home/a1097/Project/cuda_learn/build && /home/a1097/cmake-4.2.0/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
   DESC = No interactive CMake dialog available...
   restat = 1
 
@@ -56,7 +56,7 @@ build edit_cache: phony CMakeFiles/edit_cache.util
 # Utility command for rebuild_cache
 
 build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/a1097/Project/cuda_learn/build && /usr/local/bin/cmake --regenerate-during-build -S/home/a1097/Project/cuda_learn -B/home/a1097/Project/cuda_learn/build
+  COMMAND = cd /home/a1097/Project/cuda_learn/build && /home/a1097/cmake-4.2.0/bin/cmake --regenerate-during-build -S/home/a1097/Project/cuda_learn -B/home/a1097/Project/cuda_learn/build
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -176,12 +176,48 @@ build 1.softmax/shuffle: CUDA_EXECUTABLE_LINKER__shuffle_Debug 1.softmax/CMakeFi
   TARGET_PDB = shuffle.dbg
   TARGET_SUPPORT_DIR = 1.softmax/CMakeFiles/shuffle.dir
 
+# =============================================================================
+# Object build statements for EXECUTABLE target softmax_test
+
+
+#############################################
+# Order-only phony target for softmax_test
+
+build cmake_object_order_depends_target_softmax_test: phony || .
+
+build 1.softmax/CMakeFiles/softmax_test.dir/softmax_test.cu.o: CUDA_COMPILER__softmax_test_unscanned_Debug /home/a1097/Project/cuda_learn/1.softmax/softmax_test.cu || cmake_object_order_depends_target_softmax_test
+  CONFIG = Debug
+  DEP_FILE = 1.softmax/CMakeFiles/softmax_test.dir/softmax_test.cu.o.d
+  FLAGS = -g "--generate-code=arch=compute_75,code=[compute_75,sm_75]"
+  OBJECT_DIR = 1.softmax/CMakeFiles/softmax_test.dir
+  OBJECT_FILE_DIR = 1.softmax/CMakeFiles/softmax_test.dir
+  TARGET_SUPPORT_DIR = 1.softmax/CMakeFiles/softmax_test.dir
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target softmax_test
+
+
+#############################################
+# Link the executable 1.softmax/softmax_test
+
+build 1.softmax/softmax_test: CUDA_EXECUTABLE_LINKER__softmax_test_Debug 1.softmax/CMakeFiles/softmax_test.dir/softmax_test.cu.o
+  CONFIG = Debug
+  FLAGS = -g "--generate-code=arch=compute_75,code=[compute_75,sm_75]"
+  LINK_LIBRARIES = -lcudadevrt  -lcudart_static  -lrt  -lpthread  -ldl
+  OBJECT_DIR = 1.softmax/CMakeFiles/softmax_test.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = 1.softmax/softmax_test
+  TARGET_PDB = softmax_test.dbg
+  TARGET_SUPPORT_DIR = 1.softmax/CMakeFiles/softmax_test.dir
+
 
 #############################################
 # Utility command for edit_cache
 
 build 1.softmax/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/a1097/Project/cuda_learn/build/1.softmax && /usr/local/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  COMMAND = cd /home/a1097/Project/cuda_learn/build/1.softmax && /home/a1097/cmake-4.2.0/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
   DESC = No interactive CMake dialog available...
   restat = 1
 
@@ -192,12 +228,151 @@ build 1.softmax/edit_cache: phony 1.softmax/CMakeFiles/edit_cache.util
 # Utility command for rebuild_cache
 
 build 1.softmax/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/a1097/Project/cuda_learn/build/1.softmax && /usr/local/bin/cmake --regenerate-during-build -S/home/a1097/Project/cuda_learn -B/home/a1097/Project/cuda_learn/build
+  COMMAND = cd /home/a1097/Project/cuda_learn/build/1.softmax && /home/a1097/cmake-4.2.0/bin/cmake --regenerate-during-build -S/home/a1097/Project/cuda_learn -B/home/a1097/Project/cuda_learn/build
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
 
 build 1.softmax/rebuild_cache: phony 1.softmax/CMakeFiles/rebuild_cache.util
+
+# =============================================================================
+# Write statements declared in CMakeLists.txt:
+# /home/a1097/Project/cuda_learn/CMakeLists.txt
+# =============================================================================
+
+# =============================================================================
+# Object build statements for EXECUTABLE target matmul_v1
+
+
+#############################################
+# Order-only phony target for matmul_v1
+
+build cmake_object_order_depends_target_matmul_v1: phony || .
+
+build 3.matmul/CMakeFiles/matmul_v1.dir/matmul_v1.cu.o: CUDA_COMPILER__matmul_v1_unscanned_Debug /home/a1097/Project/cuda_learn/3.matmul/matmul_v1.cu || cmake_object_order_depends_target_matmul_v1
+  CONFIG = Debug
+  DEP_FILE = 3.matmul/CMakeFiles/matmul_v1.dir/matmul_v1.cu.o.d
+  FLAGS = -g "--generate-code=arch=compute_75,code=[compute_75,sm_75]"
+  INCLUDES = -isystem /usr/local/cuda/targets/x86_64-linux/include -isystem /usr/local/cuda/targets/x86_64-linux/include/cccl
+  OBJECT_DIR = 3.matmul/CMakeFiles/matmul_v1.dir
+  OBJECT_FILE_DIR = 3.matmul/CMakeFiles/matmul_v1.dir
+  TARGET_SUPPORT_DIR = 3.matmul/CMakeFiles/matmul_v1.dir
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target matmul_v1
+
+
+#############################################
+# Link the executable 3.matmul/matmul_v1
+
+build 3.matmul/matmul_v1: CUDA_EXECUTABLE_LINKER__matmul_v1_Debug 3.matmul/CMakeFiles/matmul_v1.dir/matmul_v1.cu.o | /usr/local/cuda-13.0/targets/x86_64-linux/lib/libcublas.so /usr/local/cuda-13.0/targets/x86_64-linux/lib/libcublasLt.so /usr/local/cuda-13.0/targets/x86_64-linux/lib/libculibos.a
+  CONFIG = Debug
+  FLAGS = -g "--generate-code=arch=compute_75,code=[compute_75,sm_75]"
+  LINK_LIBRARIES = /usr/local/cuda-13.0/targets/x86_64-linux/lib/libcublas.so  /usr/local/cuda-13.0/targets/x86_64-linux/lib/libcublasLt.so  /usr/local/cuda-13.0/targets/x86_64-linux/lib/libculibos.a  -lcudadevrt  -lcudart_static  -lrt  -lpthread  -ldl
+  OBJECT_DIR = 3.matmul/CMakeFiles/matmul_v1.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = 3.matmul/matmul_v1
+  TARGET_PDB = matmul_v1.dbg
+  TARGET_SUPPORT_DIR = 3.matmul/CMakeFiles/matmul_v1.dir
+
+# =============================================================================
+# Object build statements for EXECUTABLE target matmul_v2
+
+
+#############################################
+# Order-only phony target for matmul_v2
+
+build cmake_object_order_depends_target_matmul_v2: phony || .
+
+build 3.matmul/CMakeFiles/matmul_v2.dir/matmul_v2.cu.o: CUDA_COMPILER__matmul_v2_unscanned_Debug /home/a1097/Project/cuda_learn/3.matmul/matmul_v2.cu || cmake_object_order_depends_target_matmul_v2
+  CONFIG = Debug
+  DEP_FILE = 3.matmul/CMakeFiles/matmul_v2.dir/matmul_v2.cu.o.d
+  FLAGS = -g "--generate-code=arch=compute_75,code=[compute_75,sm_75]"
+  INCLUDES = -isystem /usr/local/cuda/targets/x86_64-linux/include -isystem /usr/local/cuda/targets/x86_64-linux/include/cccl
+  OBJECT_DIR = 3.matmul/CMakeFiles/matmul_v2.dir
+  OBJECT_FILE_DIR = 3.matmul/CMakeFiles/matmul_v2.dir
+  TARGET_SUPPORT_DIR = 3.matmul/CMakeFiles/matmul_v2.dir
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target matmul_v2
+
+
+#############################################
+# Link the executable 3.matmul/matmul_v2
+
+build 3.matmul/matmul_v2: CUDA_EXECUTABLE_LINKER__matmul_v2_Debug 3.matmul/CMakeFiles/matmul_v2.dir/matmul_v2.cu.o | /usr/local/cuda-13.0/targets/x86_64-linux/lib/libcublas.so /usr/local/cuda-13.0/targets/x86_64-linux/lib/libcublasLt.so /usr/local/cuda-13.0/targets/x86_64-linux/lib/libculibos.a
+  CONFIG = Debug
+  FLAGS = -g "--generate-code=arch=compute_75,code=[compute_75,sm_75]"
+  LINK_LIBRARIES = /usr/local/cuda-13.0/targets/x86_64-linux/lib/libcublas.so  /usr/local/cuda-13.0/targets/x86_64-linux/lib/libcublasLt.so  /usr/local/cuda-13.0/targets/x86_64-linux/lib/libculibos.a  -lcudadevrt  -lcudart_static  -lrt  -lpthread  -ldl
+  OBJECT_DIR = 3.matmul/CMakeFiles/matmul_v2.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = 3.matmul/matmul_v2
+  TARGET_PDB = matmul_v2.dbg
+  TARGET_SUPPORT_DIR = 3.matmul/CMakeFiles/matmul_v2.dir
+
+# =============================================================================
+# Object build statements for EXECUTABLE target matmul_v3
+
+
+#############################################
+# Order-only phony target for matmul_v3
+
+build cmake_object_order_depends_target_matmul_v3: phony || .
+
+build 3.matmul/CMakeFiles/matmul_v3.dir/matmul_v3.cu.o: CUDA_COMPILER__matmul_v3_unscanned_Debug /home/a1097/Project/cuda_learn/3.matmul/matmul_v3.cu || cmake_object_order_depends_target_matmul_v3
+  CONFIG = Debug
+  DEP_FILE = 3.matmul/CMakeFiles/matmul_v3.dir/matmul_v3.cu.o.d
+  FLAGS = -g "--generate-code=arch=compute_75,code=[compute_75,sm_75]"
+  INCLUDES = -isystem /usr/local/cuda/targets/x86_64-linux/include -isystem /usr/local/cuda/targets/x86_64-linux/include/cccl
+  OBJECT_DIR = 3.matmul/CMakeFiles/matmul_v3.dir
+  OBJECT_FILE_DIR = 3.matmul/CMakeFiles/matmul_v3.dir
+  TARGET_SUPPORT_DIR = 3.matmul/CMakeFiles/matmul_v3.dir
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target matmul_v3
+
+
+#############################################
+# Link the executable 3.matmul/matmul_v3
+
+build 3.matmul/matmul_v3: CUDA_EXECUTABLE_LINKER__matmul_v3_Debug 3.matmul/CMakeFiles/matmul_v3.dir/matmul_v3.cu.o | /usr/local/cuda-13.0/targets/x86_64-linux/lib/libcublas.so /usr/local/cuda-13.0/targets/x86_64-linux/lib/libcublasLt.so /usr/local/cuda-13.0/targets/x86_64-linux/lib/libculibos.a
+  CONFIG = Debug
+  FLAGS = -g "--generate-code=arch=compute_75,code=[compute_75,sm_75]"
+  LINK_LIBRARIES = /usr/local/cuda-13.0/targets/x86_64-linux/lib/libcublas.so  /usr/local/cuda-13.0/targets/x86_64-linux/lib/libcublasLt.so  /usr/local/cuda-13.0/targets/x86_64-linux/lib/libculibos.a  -lcudadevrt  -lcudart_static  -lrt  -lpthread  -ldl
+  OBJECT_DIR = 3.matmul/CMakeFiles/matmul_v3.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = 3.matmul/matmul_v3
+  TARGET_PDB = matmul_v3.dbg
+  TARGET_SUPPORT_DIR = 3.matmul/CMakeFiles/matmul_v3.dir
+
+
+#############################################
+# Utility command for edit_cache
+
+build 3.matmul/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /home/a1097/Project/cuda_learn/build/3.matmul && /home/a1097/cmake-4.2.0/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  DESC = No interactive CMake dialog available...
+  restat = 1
+
+build 3.matmul/edit_cache: phony 3.matmul/CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build 3.matmul/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /home/a1097/Project/cuda_learn/build/3.matmul && /home/a1097/cmake-4.2.0/bin/cmake --regenerate-during-build -S/home/a1097/Project/cuda_learn -B/home/a1097/Project/cuda_learn/build
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build 3.matmul/rebuild_cache: phony 3.matmul/CMakeFiles/rebuild_cache.util
 
 # =============================================================================
 # Write statements declared in CMakeLists.txt:
@@ -276,12 +451,48 @@ build 5.transpose/transpose_float4: CUDA_EXECUTABLE_LINKER__transpose_float4_Deb
   TARGET_PDB = transpose_float4.dbg
   TARGET_SUPPORT_DIR = 5.transpose/CMakeFiles/transpose_float4.dir
 
+# =============================================================================
+# Object build statements for EXECUTABLE target transpose_shared_memory
+
+
+#############################################
+# Order-only phony target for transpose_shared_memory
+
+build cmake_object_order_depends_target_transpose_shared_memory: phony || .
+
+build 5.transpose/CMakeFiles/transpose_shared_memory.dir/transpose_shared_memory.cu.o: CUDA_COMPILER__transpose_shared_memory_unscanned_Debug /home/a1097/Project/cuda_learn/5.transpose/transpose_shared_memory.cu || cmake_object_order_depends_target_transpose_shared_memory
+  CONFIG = Debug
+  DEP_FILE = 5.transpose/CMakeFiles/transpose_shared_memory.dir/transpose_shared_memory.cu.o.d
+  FLAGS = -g "--generate-code=arch=compute_75,code=[compute_75,sm_75]"
+  OBJECT_DIR = 5.transpose/CMakeFiles/transpose_shared_memory.dir
+  OBJECT_FILE_DIR = 5.transpose/CMakeFiles/transpose_shared_memory.dir
+  TARGET_SUPPORT_DIR = 5.transpose/CMakeFiles/transpose_shared_memory.dir
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target transpose_shared_memory
+
+
+#############################################
+# Link the executable 5.transpose/transpose_shared_memory
+
+build 5.transpose/transpose_shared_memory: CUDA_EXECUTABLE_LINKER__transpose_shared_memory_Debug 5.transpose/CMakeFiles/transpose_shared_memory.dir/transpose_shared_memory.cu.o
+  CONFIG = Debug
+  FLAGS = -g "--generate-code=arch=compute_75,code=[compute_75,sm_75]"
+  LINK_LIBRARIES = -lcudadevrt  -lcudart_static  -lrt  -lpthread  -ldl
+  OBJECT_DIR = 5.transpose/CMakeFiles/transpose_shared_memory.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = 5.transpose/transpose_shared_memory
+  TARGET_PDB = transpose_shared_memory.dbg
+  TARGET_SUPPORT_DIR = 5.transpose/CMakeFiles/transpose_shared_memory.dir
+
 
 #############################################
 # Utility command for edit_cache
 
 build 5.transpose/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/a1097/Project/cuda_learn/build/5.transpose && /usr/local/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  COMMAND = cd /home/a1097/Project/cuda_learn/build/5.transpose && /home/a1097/cmake-4.2.0/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
   DESC = No interactive CMake dialog available...
   restat = 1
 
@@ -292,7 +503,7 @@ build 5.transpose/edit_cache: phony 5.transpose/CMakeFiles/edit_cache.util
 # Utility command for rebuild_cache
 
 build 5.transpose/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/a1097/Project/cuda_learn/build/5.transpose && /usr/local/bin/cmake --regenerate-during-build -S/home/a1097/Project/cuda_learn -B/home/a1097/Project/cuda_learn/build
+  COMMAND = cd /home/a1097/Project/cuda_learn/build/5.transpose && /home/a1097/cmake-4.2.0/bin/cmake --regenerate-during-build -S/home/a1097/Project/cuda_learn -B/home/a1097/Project/cuda_learn/build
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -300,7 +511,145 @@ build 5.transpose/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
 build 5.transpose/rebuild_cache: phony 5.transpose/CMakeFiles/rebuild_cache.util
 
 # =============================================================================
+# Write statements declared in CMakeLists.txt:
+# /home/a1097/Project/cuda_learn/CMakeLists.txt
+# =============================================================================
+
+# =============================================================================
+# Object build statements for EXECUTABLE target reduce_test
+
+
+#############################################
+# Order-only phony target for reduce_test
+
+build cmake_object_order_depends_target_reduce_test: phony || .
+
+build 2.reduce/CMakeFiles/reduce_test.dir/reduce_test.cu.o: CUDA_COMPILER__reduce_test_unscanned_Debug /home/a1097/Project/cuda_learn/2.reduce/reduce_test.cu || cmake_object_order_depends_target_reduce_test
+  CONFIG = Debug
+  DEP_FILE = 2.reduce/CMakeFiles/reduce_test.dir/reduce_test.cu.o.d
+  FLAGS = -g "--generate-code=arch=compute_75,code=[compute_75,sm_75]"
+  OBJECT_DIR = 2.reduce/CMakeFiles/reduce_test.dir
+  OBJECT_FILE_DIR = 2.reduce/CMakeFiles/reduce_test.dir
+  TARGET_SUPPORT_DIR = 2.reduce/CMakeFiles/reduce_test.dir
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target reduce_test
+
+
+#############################################
+# Link the executable 2.reduce/reduce_test
+
+build 2.reduce/reduce_test: CUDA_EXECUTABLE_LINKER__reduce_test_Debug 2.reduce/CMakeFiles/reduce_test.dir/reduce_test.cu.o
+  CONFIG = Debug
+  FLAGS = -g "--generate-code=arch=compute_75,code=[compute_75,sm_75]"
+  LINK_LIBRARIES = -lcudadevrt  -lcudart_static  -lrt  -lpthread  -ldl
+  OBJECT_DIR = 2.reduce/CMakeFiles/reduce_test.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = 2.reduce/reduce_test
+  TARGET_PDB = reduce_test.dbg
+  TARGET_SUPPORT_DIR = 2.reduce/CMakeFiles/reduce_test.dir
+
+
+#############################################
+# Utility command for edit_cache
+
+build 2.reduce/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /home/a1097/Project/cuda_learn/build/2.reduce && /home/a1097/cmake-4.2.0/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  DESC = No interactive CMake dialog available...
+  restat = 1
+
+build 2.reduce/edit_cache: phony 2.reduce/CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build 2.reduce/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /home/a1097/Project/cuda_learn/build/2.reduce && /home/a1097/cmake-4.2.0/bin/cmake --regenerate-during-build -S/home/a1097/Project/cuda_learn -B/home/a1097/Project/cuda_learn/build
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build 2.reduce/rebuild_cache: phony 2.reduce/CMakeFiles/rebuild_cache.util
+
+# =============================================================================
+# Write statements declared in CMakeLists.txt:
+# /home/a1097/Project/cuda_learn/CMakeLists.txt
+# =============================================================================
+
+# =============================================================================
+# Object build statements for EXECUTABLE target RMSNorm_test
+
+
+#############################################
+# Order-only phony target for RMSNorm_test
+
+build cmake_object_order_depends_target_RMSNorm_test: phony || .
+
+build 6.RMSNorm/CMakeFiles/RMSNorm_test.dir/RMSNorm_test.cu.o: CUDA_COMPILER__RMSNorm_test_unscanned_Debug /home/a1097/Project/cuda_learn/6.RMSNorm/RMSNorm_test.cu || cmake_object_order_depends_target_RMSNorm_test
+  CONFIG = Debug
+  DEP_FILE = 6.RMSNorm/CMakeFiles/RMSNorm_test.dir/RMSNorm_test.cu.o.d
+  FLAGS = -g "--generate-code=arch=compute_75,code=[compute_75,sm_75]"
+  OBJECT_DIR = 6.RMSNorm/CMakeFiles/RMSNorm_test.dir
+  OBJECT_FILE_DIR = 6.RMSNorm/CMakeFiles/RMSNorm_test.dir
+  TARGET_SUPPORT_DIR = 6.RMSNorm/CMakeFiles/RMSNorm_test.dir
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target RMSNorm_test
+
+
+#############################################
+# Link the executable 6.RMSNorm/RMSNorm_test
+
+build 6.RMSNorm/RMSNorm_test: CUDA_EXECUTABLE_LINKER__RMSNorm_test_Debug 6.RMSNorm/CMakeFiles/RMSNorm_test.dir/RMSNorm_test.cu.o
+  CONFIG = Debug
+  FLAGS = -g "--generate-code=arch=compute_75,code=[compute_75,sm_75]"
+  LINK_LIBRARIES = -lcudadevrt  -lcudart_static  -lrt  -lpthread  -ldl
+  OBJECT_DIR = 6.RMSNorm/CMakeFiles/RMSNorm_test.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = 6.RMSNorm/RMSNorm_test
+  TARGET_PDB = RMSNorm_test.dbg
+  TARGET_SUPPORT_DIR = 6.RMSNorm/CMakeFiles/RMSNorm_test.dir
+
+
+#############################################
+# Utility command for edit_cache
+
+build 6.RMSNorm/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /home/a1097/Project/cuda_learn/build/6.RMSNorm && /home/a1097/cmake-4.2.0/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  DESC = No interactive CMake dialog available...
+  restat = 1
+
+build 6.RMSNorm/edit_cache: phony 6.RMSNorm/CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build 6.RMSNorm/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /home/a1097/Project/cuda_learn/build/6.RMSNorm && /home/a1097/cmake-4.2.0/bin/cmake --regenerate-during-build -S/home/a1097/Project/cuda_learn -B/home/a1097/Project/cuda_learn/build
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build 6.RMSNorm/rebuild_cache: phony 6.RMSNorm/CMakeFiles/rebuild_cache.util
+
+# =============================================================================
 # Target aliases.
+
+build RMSNorm_test: phony 6.RMSNorm/RMSNorm_test
+
+build matmul_v1: phony 3.matmul/matmul_v1
+
+build matmul_v2: phony 3.matmul/matmul_v2
+
+build matmul_v3: phony 3.matmul/matmul_v3
+
+build reduce_test: phony 2.reduce/reduce_test
 
 build shuffle: phony 1.softmax/shuffle
 
@@ -308,9 +657,13 @@ build softmax_kernel: phony 1.softmax/softmax_kernel
 
 build softmax_kernelv2: phony 1.softmax/softmax_kernelv2
 
+build softmax_test: phony 1.softmax/softmax_test
+
 build transpose_float4: phony 5.transpose/transpose_float4
 
 build transpose_naive: phony 5.transpose/transpose_naive
+
+build transpose_shared_memory: phony 5.transpose/transpose_shared_memory
 
 # =============================================================================
 # Folder targets.
@@ -320,7 +673,7 @@ build transpose_naive: phony 5.transpose/transpose_naive
 #############################################
 # Folder: /home/a1097/Project/cuda_learn/build
 
-build codegen: phony 1.softmax/codegen 5.transpose/codegen
+build codegen: phony 1.softmax/codegen 3.matmul/codegen 5.transpose/codegen 2.reduce/codegen 6.RMSNorm/codegen
 
 # =============================================================================
 
@@ -332,6 +685,20 @@ build 1.softmax/codegen: phony
 # =============================================================================
 
 #############################################
+# Folder: /home/a1097/Project/cuda_learn/build/2.reduce
+
+build 2.reduce/codegen: phony
+
+# =============================================================================
+
+#############################################
+# Folder: /home/a1097/Project/cuda_learn/build/3.matmul
+
+build 3.matmul/codegen: phony
+
+# =============================================================================
+
+#############################################
 # Folder: /home/a1097/Project/cuda_learn/build/5.transpose
 
 build 5.transpose/codegen: phony
@@ -339,23 +706,51 @@ build 5.transpose/codegen: phony
 # =============================================================================
 
 #############################################
+# Folder: /home/a1097/Project/cuda_learn/build/6.RMSNorm
+
+build 6.RMSNorm/codegen: phony
+
+# =============================================================================
+
+#############################################
 # Folder: /home/a1097/Project/cuda_learn/build
 
-build all: phony 1.softmax/all 5.transpose/all
+build all: phony 1.softmax/all 3.matmul/all 5.transpose/all 2.reduce/all 6.RMSNorm/all
 
 # =============================================================================
 
 #############################################
 # Folder: /home/a1097/Project/cuda_learn/build/1.softmax
 
-build 1.softmax/all: phony 1.softmax/softmax_kernelv2 1.softmax/softmax_kernel 1.softmax/shuffle
+build 1.softmax/all: phony 1.softmax/softmax_kernelv2 1.softmax/softmax_kernel 1.softmax/shuffle 1.softmax/softmax_test
+
+# =============================================================================
+
+#############################################
+# Folder: /home/a1097/Project/cuda_learn/build/2.reduce
+
+build 2.reduce/all: phony 2.reduce/reduce_test
+
+# =============================================================================
+
+#############################################
+# Folder: /home/a1097/Project/cuda_learn/build/3.matmul
+
+build 3.matmul/all: phony 3.matmul/matmul_v1 3.matmul/matmul_v2 3.matmul/matmul_v3
 
 # =============================================================================
 
 #############################################
 # Folder: /home/a1097/Project/cuda_learn/build/5.transpose
 
-build 5.transpose/all: phony 5.transpose/transpose_naive 5.transpose/transpose_float4
+build 5.transpose/all: phony 5.transpose/transpose_naive 5.transpose/transpose_float4 5.transpose/transpose_shared_memory
+
+# =============================================================================
+
+#############################################
+# Folder: /home/a1097/Project/cuda_learn/build/6.RMSNorm
+
+build 6.RMSNorm/all: phony 6.RMSNorm/RMSNorm_test
 
 # =============================================================================
 # Built-in targets
@@ -364,14 +759,14 @@ build 5.transpose/all: phony 5.transpose/transpose_naive 5.transpose/transpose_f
 #############################################
 # Re-run CMake if any of its inputs changed.
 
-build build.ninja /home/a1097/Project/cuda_learn/build/cmake_install.cmake /home/a1097/Project/cuda_learn/build/1.softmax/cmake_install.cmake /home/a1097/Project/cuda_learn/build/5.transpose/cmake_install.cmake: RERUN_CMAKE | /home/a1097/Project/cuda_learn/1.softmax/CMakeLists.txt /home/a1097/Project/cuda_learn/5.transpose/CMakeLists.txt /home/a1097/Project/cuda_learn/CMakeLists.txt /usr/local/share/cmake-4.2/Modules/CMakeCInformation.cmake /usr/local/share/cmake-4.2/Modules/CMakeCUDAInformation.cmake /usr/local/share/cmake-4.2/Modules/CMakeCXXInformation.cmake /usr/local/share/cmake-4.2/Modules/CMakeCommonLanguageInclude.cmake /usr/local/share/cmake-4.2/Modules/CMakeGenericSystem.cmake /usr/local/share/cmake-4.2/Modules/CMakeInitializeConfigs.cmake /usr/local/share/cmake-4.2/Modules/CMakeLanguageInformation.cmake /usr/local/share/cmake-4.2/Modules/CMakeSystemSpecificInformation.cmake /usr/local/share/cmake-4.2/Modules/CMakeSystemSpecificInitialize.cmake /usr/local/share/cmake-4.2/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/local/share/cmake-4.2/Modules/Compiler/GNU-C.cmake /usr/local/share/cmake-4.2/Modules/Compiler/GNU-CXX.cmake /usr/local/share/cmake-4.2/Modules/Compiler/GNU.cmake /usr/local/share/cmake-4.2/Modules/Compiler/NVIDIA-CUDA.cmake /usr/local/share/cmake-4.2/Modules/Compiler/NVIDIA.cmake /usr/local/share/cmake-4.2/Modules/Internal/CMakeCLinkerInformation.cmake /usr/local/share/cmake-4.2/Modules/Internal/CMakeCXXLinkerInformation.cmake /usr/local/share/cmake-4.2/Modules/Internal/CMakeCommonLinkerInformation.cmake /usr/local/share/cmake-4.2/Modules/Linker/GNU-C.cmake /usr/local/share/cmake-4.2/Modules/Linker/GNU-CXX.cmake /usr/local/share/cmake-4.2/Modules/Linker/GNU.cmake /usr/local/share/cmake-4.2/Modules/Platform/Linker/GNU.cmake /usr/local/share/cmake-4.2/Modules/Platform/Linker/Linux-GNU-C.cmake /usr/local/share/cmake-4.2/Modules/Platform/Linker/Linux-GNU-CXX.cmake /usr/local/share/cmake-4.2/Modules/Platform/Linker/Linux-GNU.cmake /usr/local/share/cmake-4.2/Modules/Platform/Linux-GNU-C.cmake /usr/local/share/cmake-4.2/Modules/Platform/Linux-GNU-CXX.cmake /usr/local/share/cmake-4.2/Modules/Platform/Linux-GNU.cmake /usr/local/share/cmake-4.2/Modules/Platform/Linux-Initialize.cmake /usr/local/share/cmake-4.2/Modules/Platform/Linux-NVIDIA-CUDA.cmake /usr/local/share/cmake-4.2/Modules/Platform/Linux.cmake /usr/local/share/cmake-4.2/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/4.2.0/CMakeCCompiler.cmake CMakeFiles/4.2.0/CMakeCUDACompiler.cmake CMakeFiles/4.2.0/CMakeCXXCompiler.cmake CMakeFiles/4.2.0/CMakeSystem.cmake
+build build.ninja /home/a1097/Project/cuda_learn/build/cmake_install.cmake /home/a1097/Project/cuda_learn/build/1.softmax/cmake_install.cmake /home/a1097/Project/cuda_learn/build/3.matmul/cmake_install.cmake /home/a1097/Project/cuda_learn/build/5.transpose/cmake_install.cmake /home/a1097/Project/cuda_learn/build/2.reduce/cmake_install.cmake /home/a1097/Project/cuda_learn/build/6.RMSNorm/cmake_install.cmake: RERUN_CMAKE | /home/a1097/Project/cuda_learn/1.softmax/CMakeLists.txt /home/a1097/Project/cuda_learn/2.reduce/CMakeLists.txt /home/a1097/Project/cuda_learn/3.matmul/CMakeLists.txt /home/a1097/Project/cuda_learn/5.transpose/CMakeLists.txt /home/a1097/Project/cuda_learn/6.RMSNorm/CMakeLists.txt /home/a1097/Project/cuda_learn/CMakeLists.txt /home/a1097/cmake-4.2.0/Modules/CMakeCInformation.cmake /home/a1097/cmake-4.2.0/Modules/CMakeCUDAInformation.cmake /home/a1097/cmake-4.2.0/Modules/CMakeCXXInformation.cmake /home/a1097/cmake-4.2.0/Modules/CMakeCommonLanguageInclude.cmake /home/a1097/cmake-4.2.0/Modules/CMakeGenericSystem.cmake /home/a1097/cmake-4.2.0/Modules/CMakeInitializeConfigs.cmake /home/a1097/cmake-4.2.0/Modules/CMakeLanguageInformation.cmake /home/a1097/cmake-4.2.0/Modules/CMakeSystemSpecificInformation.cmake /home/a1097/cmake-4.2.0/Modules/CMakeSystemSpecificInitialize.cmake /home/a1097/cmake-4.2.0/Modules/CheckCSourceCompiles.cmake /home/a1097/cmake-4.2.0/Modules/CheckIncludeFile.cmake /home/a1097/cmake-4.2.0/Modules/CheckLibraryExists.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/CMakeCommonCompilerMacros.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/GNU-C.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/GNU-CXX.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/GNU.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/NVIDIA-CUDA.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/NVIDIA.cmake /home/a1097/cmake-4.2.0/Modules/FindCUDAToolkit.cmake /home/a1097/cmake-4.2.0/Modules/FindPackageHandleStandardArgs.cmake /home/a1097/cmake-4.2.0/Modules/FindPackageMessage.cmake /home/a1097/cmake-4.2.0/Modules/FindThreads.cmake /home/a1097/cmake-4.2.0/Modules/Internal/CMakeCLinkerInformation.cmake /home/a1097/cmake-4.2.0/Modules/Internal/CMakeCXXLinkerInformation.cmake /home/a1097/cmake-4.2.0/Modules/Internal/CMakeCommonLinkerInformation.cmake /home/a1097/cmake-4.2.0/Modules/Internal/CheckSourceCompiles.cmake /home/a1097/cmake-4.2.0/Modules/Linker/GNU-C.cmake /home/a1097/cmake-4.2.0/Modules/Linker/GNU-CXX.cmake /home/a1097/cmake-4.2.0/Modules/Linker/GNU.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linker/GNU.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linker/Linux-GNU-C.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linker/Linux-GNU-CXX.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linker/Linux-GNU.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux-GNU-C.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux-GNU-CXX.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux-GNU.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux-Initialize.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux-NVIDIA-CUDA.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux.cmake /home/a1097/cmake-4.2.0/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/4.2.0/CMakeCCompiler.cmake CMakeFiles/4.2.0/CMakeCUDACompiler.cmake CMakeFiles/4.2.0/CMakeCXXCompiler.cmake CMakeFiles/4.2.0/CMakeSystem.cmake
   pool = console
 
 
 #############################################
 # A missing CMake input file is not an error.
 
-build /home/a1097/Project/cuda_learn/1.softmax/CMakeLists.txt /home/a1097/Project/cuda_learn/5.transpose/CMakeLists.txt /home/a1097/Project/cuda_learn/CMakeLists.txt /usr/local/share/cmake-4.2/Modules/CMakeCInformation.cmake /usr/local/share/cmake-4.2/Modules/CMakeCUDAInformation.cmake /usr/local/share/cmake-4.2/Modules/CMakeCXXInformation.cmake /usr/local/share/cmake-4.2/Modules/CMakeCommonLanguageInclude.cmake /usr/local/share/cmake-4.2/Modules/CMakeGenericSystem.cmake /usr/local/share/cmake-4.2/Modules/CMakeInitializeConfigs.cmake /usr/local/share/cmake-4.2/Modules/CMakeLanguageInformation.cmake /usr/local/share/cmake-4.2/Modules/CMakeSystemSpecificInformation.cmake /usr/local/share/cmake-4.2/Modules/CMakeSystemSpecificInitialize.cmake /usr/local/share/cmake-4.2/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/local/share/cmake-4.2/Modules/Compiler/GNU-C.cmake /usr/local/share/cmake-4.2/Modules/Compiler/GNU-CXX.cmake /usr/local/share/cmake-4.2/Modules/Compiler/GNU.cmake /usr/local/share/cmake-4.2/Modules/Compiler/NVIDIA-CUDA.cmake /usr/local/share/cmake-4.2/Modules/Compiler/NVIDIA.cmake /usr/local/share/cmake-4.2/Modules/Internal/CMakeCLinkerInformation.cmake /usr/local/share/cmake-4.2/Modules/Internal/CMakeCXXLinkerInformation.cmake /usr/local/share/cmake-4.2/Modules/Internal/CMakeCommonLinkerInformation.cmake /usr/local/share/cmake-4.2/Modules/Linker/GNU-C.cmake /usr/local/share/cmake-4.2/Modules/Linker/GNU-CXX.cmake /usr/local/share/cmake-4.2/Modules/Linker/GNU.cmake /usr/local/share/cmake-4.2/Modules/Platform/Linker/GNU.cmake /usr/local/share/cmake-4.2/Modules/Platform/Linker/Linux-GNU-C.cmake /usr/local/share/cmake-4.2/Modules/Platform/Linker/Linux-GNU-CXX.cmake /usr/local/share/cmake-4.2/Modules/Platform/Linker/Linux-GNU.cmake /usr/local/share/cmake-4.2/Modules/Platform/Linux-GNU-C.cmake /usr/local/share/cmake-4.2/Modules/Platform/Linux-GNU-CXX.cmake /usr/local/share/cmake-4.2/Modules/Platform/Linux-GNU.cmake /usr/local/share/cmake-4.2/Modules/Platform/Linux-Initialize.cmake /usr/local/share/cmake-4.2/Modules/Platform/Linux-NVIDIA-CUDA.cmake /usr/local/share/cmake-4.2/Modules/Platform/Linux.cmake /usr/local/share/cmake-4.2/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/4.2.0/CMakeCCompiler.cmake CMakeFiles/4.2.0/CMakeCUDACompiler.cmake CMakeFiles/4.2.0/CMakeCXXCompiler.cmake CMakeFiles/4.2.0/CMakeSystem.cmake: phony
+build /home/a1097/Project/cuda_learn/1.softmax/CMakeLists.txt /home/a1097/Project/cuda_learn/2.reduce/CMakeLists.txt /home/a1097/Project/cuda_learn/3.matmul/CMakeLists.txt /home/a1097/Project/cuda_learn/5.transpose/CMakeLists.txt /home/a1097/Project/cuda_learn/6.RMSNorm/CMakeLists.txt /home/a1097/Project/cuda_learn/CMakeLists.txt /home/a1097/cmake-4.2.0/Modules/CMakeCInformation.cmake /home/a1097/cmake-4.2.0/Modules/CMakeCUDAInformation.cmake /home/a1097/cmake-4.2.0/Modules/CMakeCXXInformation.cmake /home/a1097/cmake-4.2.0/Modules/CMakeCommonLanguageInclude.cmake /home/a1097/cmake-4.2.0/Modules/CMakeGenericSystem.cmake /home/a1097/cmake-4.2.0/Modules/CMakeInitializeConfigs.cmake /home/a1097/cmake-4.2.0/Modules/CMakeLanguageInformation.cmake /home/a1097/cmake-4.2.0/Modules/CMakeSystemSpecificInformation.cmake /home/a1097/cmake-4.2.0/Modules/CMakeSystemSpecificInitialize.cmake /home/a1097/cmake-4.2.0/Modules/CheckCSourceCompiles.cmake /home/a1097/cmake-4.2.0/Modules/CheckIncludeFile.cmake /home/a1097/cmake-4.2.0/Modules/CheckLibraryExists.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/CMakeCommonCompilerMacros.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/GNU-C.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/GNU-CXX.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/GNU.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/NVIDIA-CUDA.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/NVIDIA.cmake /home/a1097/cmake-4.2.0/Modules/FindCUDAToolkit.cmake /home/a1097/cmake-4.2.0/Modules/FindPackageHandleStandardArgs.cmake /home/a1097/cmake-4.2.0/Modules/FindPackageMessage.cmake /home/a1097/cmake-4.2.0/Modules/FindThreads.cmake /home/a1097/cmake-4.2.0/Modules/Internal/CMakeCLinkerInformation.cmake /home/a1097/cmake-4.2.0/Modules/Internal/CMakeCXXLinkerInformation.cmake /home/a1097/cmake-4.2.0/Modules/Internal/CMakeCommonLinkerInformation.cmake /home/a1097/cmake-4.2.0/Modules/Internal/CheckSourceCompiles.cmake /home/a1097/cmake-4.2.0/Modules/Linker/GNU-C.cmake /home/a1097/cmake-4.2.0/Modules/Linker/GNU-CXX.cmake /home/a1097/cmake-4.2.0/Modules/Linker/GNU.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linker/GNU.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linker/Linux-GNU-C.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linker/Linux-GNU-CXX.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linker/Linux-GNU.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux-GNU-C.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux-GNU-CXX.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux-GNU.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux-Initialize.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux-NVIDIA-CUDA.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux.cmake /home/a1097/cmake-4.2.0/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/4.2.0/CMakeCCompiler.cmake CMakeFiles/4.2.0/CMakeCUDACompiler.cmake CMakeFiles/4.2.0/CMakeCXXCompiler.cmake CMakeFiles/4.2.0/CMakeSystem.cmake: phony
 
 
 #############################################

@@ -3,7 +3,10 @@
 	[
 		"/home/a1097/Project/cuda_learn/build/cmake_install.cmake",
 		"/home/a1097/Project/cuda_learn/build/1.softmax/cmake_install.cmake",
-		"/home/a1097/Project/cuda_learn/build/5.transpose/cmake_install.cmake"
+		"/home/a1097/Project/cuda_learn/build/3.matmul/cmake_install.cmake",
+		"/home/a1097/Project/cuda_learn/build/5.transpose/cmake_install.cmake",
+		"/home/a1097/Project/cuda_learn/build/2.reduce/cmake_install.cmake",
+		"/home/a1097/Project/cuda_learn/build/6.RMSNorm/cmake_install.cmake"
 	],
 	"Parallel" : false
 }

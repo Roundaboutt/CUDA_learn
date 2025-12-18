@@ -1,8 +1,6 @@
 #include <iostream>
 #include "cuda_runtime.h"
 
-
-
 float* transpose_cpu(float* output, int nx, int ny){
 
     float* input = (float*)malloc(sizeof(float) * nx * ny);
@@ -20,40 +18,30 @@ float* transpose_cpu(float* output, int nx, int ny){
 }
 
 
-// 共享显存优化
 template <const int BLKDIM_X, const int BLKDIM_Y, const int PAD>
 __global__ void transpose_v2(float* output, float* input, int M, int N) {
 
     __shared__ float tile[BLKDIM_Y][BLKDIM_X + PAD];
 
-    // 线程在整个矩阵中的二维坐标
-    int id_x = threadIdx.x + blockIdx.x * blockDim.x;
-    int id_y = threadIdx.y + blockIdx.y * blockDim.y;
-    // 线程在整个矩阵中的索引(input)
-    int thread_in = id_y * M + id_x;
+    const int id_x = threadIdx.x + blockIdx.x * blockDim.x;
+    const int id_y = threadIdx.y + blockIdx.y * blockDim.y;
 
-    // 线程在一个block(tile)内的索引
-    int bidx = threadIdx.y * blockDim.x + threadIdx.x;
-    // 线程在一个block(tile)内的二维坐标(转置后)
-    int idx_row = bidx / blockDim.y;
-    int idx_col = bidx % blockDim.y;
-
-    // 转置后在整个矩阵中的坐标
-    int trans_x = blockIdx.y * blockDim.y + idx_col;
-    int trans_y = blockIdx.x * blockDim.x + idx_row;
-    //转化为output中的一维索引
-    int thread_out = trans_y * N + trans_x;
-
-    // input -> tile
-    if (id_x < M && id_y < N) {
-        tile[threadIdx.y][threadIdx.x] = input[thread_in];
+    if (id_x < M && id_y < N)
+    {
+        tile[threadIdx.y][threadIdx.x] = input[id_y * M + id_x];
     }
 
     __syncthreads();
 
-    // tile -> output
-    if (trans_x < N && trans_y < M) {
-        output[thread_out] = tile[idx_col][idx_row];
+    const int block_x_out = blockIdx.y * BLKDIM_Y;
+    const int block_y_out = blockIdx.x * BLKDIM_X;
+
+    const int trans_x = block_x_out + threadIdx.x;
+    const int trans_y = block_y_out + threadIdx.y;
+
+    if (trans_x < N && trans_y < M)
+    {
+        output[trans_y * N + trans_x] = tile[threadIdx.x][threadIdx.y];
     }
 }
 
@@ -136,9 +124,10 @@ int main(){
     float* v2_output = (float*)malloc(numBytes);
 
     cpu_output = transpose_cpu(cpu_output, M, N);
+    std::cout << "PAD:" << 0 << std::endl;
     v2_output = v2_time<32, 32, 0>(M, N, 10, 10);
+    std::cout << "PAD:" << 1 << std::endl;
     v2_output = v2_time<32, 32, 1>(M, N, 10, 10);
-    v2_output = v2_time<32, 32, 2>(M, N, 10, 10);
 
     if (isMatch(cpu_output, v2_output, M * N)){
         std::cout << "Results Match!" << std::endl;

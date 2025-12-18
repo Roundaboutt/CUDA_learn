@@ -134,8 +134,16 @@ int main(){
     v2_output1 = v2_time<32, 8>(M, N, 10, 10);
     v2_output2 = v2_time<16, 16>(M, N, 10, 10);
 
+
+    if (isMatch(cpu_output, v2_output1, N * M)){
+        std::cout << "Results1 Match!" << std::endl;
+    }
+    else{
+        std::cout << "Results not Match!" << std::endl;
+    }
+    
     if (isMatch(cpu_output, v2_output2, N * M)){
-        std::cout << "Results Match!" << std::endl;
+        std::cout << "Results2 Match!" << std::endl;
     }
     else{
         std::cout << "Results not Match!" << std::endl;

@@ -2,7 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "3.matmul/matmul_v3"
+			"path" : "3.matmul/matmul_v2"
 		}
 	],
 	"backtrace" : 1,
@@ -29,7 +29,7 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 3,
+				"line" : 2,
 				"parent" : 0
 			},
 			{
@@ -120,7 +120,7 @@
 			]
 		}
 	],
-	"id" : "matmul_v3::@0489b1597bb47cc8cc7b",
+	"id" : "matmul_v2::@0489b1597bb47cc8cc7b",
 	"link" : 
 	{
 		"commandFragments" : 
@@ -174,8 +174,8 @@
 			"id" : "CUDA::cublas::@6890427a1f51a3e7e1df"
 		}
 	],
-	"name" : "matmul_v3",
-	"nameOnDisk" : "matmul_v3",
+	"name" : "matmul_v2",
+	"nameOnDisk" : "matmul_v2",
 	"paths" : 
 	{
 		"build" : "3.matmul",
@@ -196,7 +196,7 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "3.matmul/matmul_v3.cu",
+			"path" : "3.matmul/matmul_v2.cu",
 			"sourceGroupIndex" : 0
 		}
 	],

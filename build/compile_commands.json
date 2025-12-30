@@ -43,6 +43,12 @@
 },
 {
   "directory": "/home/a1097/Project/cuda_learn/build",
+  "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -g \"--generate-code=arch=compute_75,code=[compute_75,sm_75]\" -x cu -c /home/a1097/Project/cuda_learn/3.matmul/matmul_test.cu -o 3.matmul/CMakeFiles/matmul_test.dir/matmul_test.cu.o",
+  "file": "/home/a1097/Project/cuda_learn/3.matmul/matmul_test.cu",
+  "output": "/home/a1097/Project/cuda_learn/build/3.matmul/CMakeFiles/matmul_test.dir/matmul_test.cu.o"
+},
+{
+  "directory": "/home/a1097/Project/cuda_learn/build",
   "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -g \"--generate-code=arch=compute_75,code=[compute_75,sm_75]\" -x cu -c /home/a1097/Project/cuda_learn/5.transpose/transpose_naive.cu -o 5.transpose/CMakeFiles/transpose_naive.dir/transpose_naive.cu.o",
   "file": "/home/a1097/Project/cuda_learn/5.transpose/transpose_naive.cu",
   "output": "/home/a1097/Project/cuda_learn/build/5.transpose/CMakeFiles/transpose_naive.dir/transpose_naive.cu.o"
@@ -70,5 +76,17 @@
   "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -g \"--generate-code=arch=compute_75,code=[compute_75,sm_75]\" -x cu -c /home/a1097/Project/cuda_learn/6.RMSNorm/RMSNorm_test.cu -o 6.RMSNorm/CMakeFiles/RMSNorm_test.dir/RMSNorm_test.cu.o",
   "file": "/home/a1097/Project/cuda_learn/6.RMSNorm/RMSNorm_test.cu",
   "output": "/home/a1097/Project/cuda_learn/build/6.RMSNorm/CMakeFiles/RMSNorm_test.dir/RMSNorm_test.cu.o"
+},
+{
+  "directory": "/home/a1097/Project/cuda_learn/build",
+  "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -g \"--generate-code=arch=compute_75,code=[compute_75,sm_75]\" -x cu -c /home/a1097/Project/cuda_learn/7.vector_add/add_kernel.cu -o 7.vector_add/CMakeFiles/add_kernel.dir/add_kernel.cu.o",
+  "file": "/home/a1097/Project/cuda_learn/7.vector_add/add_kernel.cu",
+  "output": "/home/a1097/Project/cuda_learn/build/7.vector_add/CMakeFiles/add_kernel.dir/add_kernel.cu.o"
+},
+{
+  "directory": "/home/a1097/Project/cuda_learn/build",
+  "command": "/usr/local/cuda/bin/nvcc -forward-unknown-to-host-compiler -g \"--generate-code=arch=compute_75,code=[compute_75,sm_75]\" -x cu -c /home/a1097/Project/cuda_learn/8.conv/im2col.cu -o 8.conv/CMakeFiles/im2col.dir/im2col.cu.o",
+  "file": "/home/a1097/Project/cuda_learn/8.conv/im2col.cu",
+  "output": "/home/a1097/Project/cuda_learn/build/8.conv/CMakeFiles/im2col.dir/im2col.cu.o"
 }
 ]

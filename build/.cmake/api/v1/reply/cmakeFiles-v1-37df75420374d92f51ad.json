@@ -289,6 +289,12 @@
 		},
 		{
 			"path" : "6.RMSNorm/CMakeLists.txt"
+		},
+		{
+			"path" : "7.vector_add/CMakeLists.txt"
+		},
+		{
+			"path" : "8.conv/CMakeLists.txt"
 		}
 	],
 	"kind" : "cmakeFiles",

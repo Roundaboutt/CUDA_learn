@@ -16,40 +16,34 @@ __global__ void add_kernelv1(float* A, float* B, float* C, const int N)
 
 __global__ void add_kernelv2(float* A, float* B, float* C, const int N)
 {
-    const int tid = threadIdx.x;
-    const int bid = blockIdx.x;
-    const int global_id = tid + bid * blockDim.x;
-
-    constexpr int pack_size = 4;
+    const int id = threadIdx.x + blockIdx.x * blockDim.x;
+    const int pack_size = 4;
     const int pack_num = N / pack_size;
     const int pack_off = pack_num * pack_size;
 
 
-    float4* A_pack = reinterpret_cast<float4*> (A);
-    float4* B_pack = reinterpret_cast<float4*> (B);
-    float4* C_pack = reinterpret_cast<float4*> (C);
+    float4* vec_A = reinterpret_cast<float4*>(A);
+    float4* vec_B = reinterpret_cast<float4*>(B);
+    float4* vec_C = reinterpret_cast<float4*>(C);
 
-    #pragma unroll
-    for (int i = global_id; i < pack_num; i += blockDim.x * gridDim.x)
-    {   
-        float4 temp_A = A_pack[i];
-        float4 temp_B = B_pack[i];
-        float4 temp_C;
-        
-        temp_C.x = temp_A.x + temp_B.x;
-        temp_C.y = temp_A.y + temp_B.y;
-        temp_C.z = temp_A.z + temp_B.z;
-        temp_C.w = temp_A.w + temp_B.w;
+    for (int i = id; i < pack_num; i += gridDim.x * blockDim.x)
+    {
+        float4 pack_A = vec_A[i];
+        float4 pack_B = vec_B[i];
+        float4 pack_C;
 
-        C_pack[i] = temp_C;
+        pack_C.x = pack_A.x + pack_B.x;
+        pack_C.y = pack_A.y + pack_B.y;
+        pack_C.z = pack_A.z + pack_B.z;
+        pack_C.w = pack_A.w + pack_B.w;
+
+        vec_C[i] = pack_C;
     }
 
-    #pragma unroll
-    for (int i = global_id + pack_off; i < N; i += blockDim.x * gridDim.x)
+    for (int i = id + pack_off; i < N; i += gridDim.x * blockDim.x)
     {
         C[i] = A[i] + B[i];
     }
-    
 }
 
 
@@ -64,7 +58,7 @@ void add_cpu(float* A, float* B, float* C, const int N)
 
 int main()
 {
-    constexpr int N = 1024 * 1024;
+    constexpr int N = 1024*1024;
     constexpr int numBytes = sizeof(float) * N;
 
     float* h_A = (float*)malloc(numBytes);
@@ -90,7 +84,7 @@ int main()
     cudaMemcpy(d_A, h_A, numBytes, cudaMemcpyHostToDevice);
     cudaMemcpy(d_B, h_B, numBytes, cudaMemcpyHostToDevice);
 
-    dim3 block(1024);
+    dim3 block(512);
     dim3 grid((N + block.x - 1) / block.x);
 
     add_kernelv2<<<grid, block>>>(d_A, d_B, d_C, N);

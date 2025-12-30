@@ -9,6 +9,7 @@
 /home/a1097/Project/cuda_learn/build/3.matmul/CMakeFiles/matmul_v1.dir
 /home/a1097/Project/cuda_learn/build/3.matmul/CMakeFiles/matmul_v2.dir
 /home/a1097/Project/cuda_learn/build/3.matmul/CMakeFiles/matmul_v3.dir
+/home/a1097/Project/cuda_learn/build/3.matmul/CMakeFiles/matmul_test.dir
 /home/a1097/Project/cuda_learn/build/3.matmul/CMakeFiles/edit_cache.dir
 /home/a1097/Project/cuda_learn/build/3.matmul/CMakeFiles/rebuild_cache.dir
 /home/a1097/Project/cuda_learn/build/5.transpose/CMakeFiles/transpose_naive.dir
@@ -22,3 +23,9 @@
 /home/a1097/Project/cuda_learn/build/6.RMSNorm/CMakeFiles/RMSNorm_test.dir
 /home/a1097/Project/cuda_learn/build/6.RMSNorm/CMakeFiles/edit_cache.dir
 /home/a1097/Project/cuda_learn/build/6.RMSNorm/CMakeFiles/rebuild_cache.dir
+/home/a1097/Project/cuda_learn/build/7.vector_add/CMakeFiles/add_kernel.dir
+/home/a1097/Project/cuda_learn/build/7.vector_add/CMakeFiles/edit_cache.dir
+/home/a1097/Project/cuda_learn/build/7.vector_add/CMakeFiles/rebuild_cache.dir
+/home/a1097/Project/cuda_learn/build/8.conv/CMakeFiles/im2col.dir
+/home/a1097/Project/cuda_learn/build/8.conv/CMakeFiles/edit_cache.dir
+/home/a1097/Project/cuda_learn/build/8.conv/CMakeFiles/rebuild_cache.dir

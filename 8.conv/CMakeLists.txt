@@ -1,0 +1,1 @@
+add_executable(im2col im2col.cu)

@@ -3,34 +3,70 @@
 #include<vector>
 #include<cublas_v2.h>
 
+// #define OFFSET(row, col, ld) ((row) * (ld) + (col))
+// template <const int BLOCKSIZE>
+// __global__ void sgemm_v2(float* A, float* B, float* C, int M, int N, int K, float alpha, float beta){
+//     const int BN = BLOCKSIZE;
+//     const int BM = BLOCKSIZE;
+//     const int BK = BLOCKSIZE;
+
+//     __shared__ float As[BM][BK];
+//     __shared__ float Bs[BK][BN];
+
+//     const int tx = threadIdx.x;
+//     const int ty = threadIdx.y;
+//     const int bx = blockIdx.x;
+//     const int by = blockIdx.y;
+
+//     const int global_x = tx + bx * blockDim.x;
+//     const int global_y = ty + by * blockDim.y;
+
+//     float temp = 0.f;
+//     for (int k = 0; k < K; k += BK)
+//     {
+//         As[ty][tx] = A[OFFSET(global_y, tx + k, K)];
+//         Bs[ty][tx] = B[OFFSET(ty + k, global_x, N)];
+
+//         __syncthreads();
+
+//         for (int i = 0; i < BK; i++)
+//         {
+//             temp += As[ty][i] * Bs[i][tx];
+//         }
+
+//         __syncthreads();
+//     }
+
+//     C[OFFSET(global_y, global_x, N)] = alpha * temp + beta * C[OFFSET(global_y, global_x, N)];
+
+// }
+
 #define OFFSET(row, col, ld) ((row) * (ld) + (col))
 template <const int BLOCKSIZE>
-__global__ void sgemm_v2(float* A, float* B, float* C, int M, int N, int K, float alpha, float beta){
+__global__ void sgemm_v2(float* A, float* B, float* C, int M, int N, int K, float alpha, float beta)
+{
+    const int tx = threadIdx.x;
+    const int ty = threadIdx.y;
+    const int global_x = tx + blockIdx.x * blockDim.x;
+    const int global_y = ty + blockIdx.y * blockDim.y;
+
     const int BM = BLOCKSIZE;
     const int BN = BLOCKSIZE;
     const int BK = BLOCKSIZE;
 
-    const int tx = threadIdx.x;
-    const int ty = threadIdx.y;
-
-    const int global_x = tx + blockDim.x * blockIdx.x;
-    const int global_y = ty + blockDim.y * blockIdx.y;
-
     __shared__ float As[BM][BK];
     __shared__ float Bs[BK][BN];
 
-
-    if (global_x >= N || global_y >= N) return;
+    if (global_x >= N || global_y >= M) return;
 
     float temp = 0.f;
-
-#pragma unroll    
     for (int k = 0; k < K; k += BK)
     {
-        As[ty][tx] = A[OFFSET(global_y, tx + k, K)];
-        Bs[ty][tx] = B[OFFSET(ty + k, global_x, N)];
+        As[ty][tx] = A[global_y * K + tx + k];
+        Bs[ty][tx] = B[(ty + k) * N + global_x];
 
         __syncthreads();
+
 
         for (int i = 0; i < BK; i++)
         {
@@ -40,8 +76,9 @@ __global__ void sgemm_v2(float* A, float* B, float* C, int M, int N, int K, floa
         __syncthreads();
     }
 
-    C[OFFSET(global_y, global_x, N)] = alpha * temp + beta * C[OFFSET(global_y, global_x, N)];
+    C[global_y * N + global_x] = alpha * temp + beta * C[global_y * N + global_x];
 }
+
 
 void call_v2(float* A, float* B, float* C, int M, int N, int K){
     const int alpha = 1;

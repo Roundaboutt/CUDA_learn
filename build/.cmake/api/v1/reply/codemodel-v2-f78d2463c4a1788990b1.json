@@ -578,7 +578,9 @@
 						2,
 						3,
 						4,
-						5
+						5,
+						6,
+						7
 					],
 					"jsonFile" : "directory-.-Debug-9ad1a58d4644cf6543fa.json",
 					"minimumCMakeVersion" : 
@@ -600,10 +602,10 @@
 					"source" : "1.softmax",
 					"targetIndexes" : 
 					[
-						5,
-						6,
-						7,
-						8
+						8,
+						9,
+						10,
+						11
 					]
 				},
 				{
@@ -618,9 +620,10 @@
 					"source" : "3.matmul",
 					"targetIndexes" : 
 					[
-						1,
-						2,
-						3
+						3,
+						4,
+						5,
+						6
 					]
 				},
 				{
@@ -635,9 +638,9 @@
 					"source" : "5.transpose",
 					"targetIndexes" : 
 					[
-						9,
-						10,
-						11
+						12,
+						13,
+						14
 					]
 				},
 				{
@@ -652,7 +655,7 @@
 					"source" : "2.reduce",
 					"targetIndexes" : 
 					[
-						4
+						7
 					]
 				},
 				{
@@ -668,6 +671,36 @@
 					"targetIndexes" : 
 					[
 						0
+					]
+				},
+				{
+					"build" : "7.vector_add",
+					"jsonFile" : "directory-7.vector_add-Debug-89f8762931cebbc119d7.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "4.0"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "7.vector_add",
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"build" : "8.conv",
+					"jsonFile" : "directory-8.conv-Debug-41f7b6f27a7a76e2800a.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "4.0"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "8.conv",
+					"targetIndexes" : 
+					[
+						2
 					]
 				}
 			],
@@ -755,7 +788,9 @@
 						2,
 						3,
 						4,
-						5
+						5,
+						6,
+						7
 					],
 					"name" : "cuda_learn",
 					"targetIndexes" : 
@@ -771,7 +806,10 @@
 						8,
 						9,
 						10,
-						11
+						11,
+						12,
+						13,
+						14
 					]
 				}
 			],
@@ -785,23 +823,44 @@
 					"projectIndex" : 0
 				},
 				{
+					"directoryIndex" : 6,
+					"id" : "add_kernel::@3e79370732b9be32d34f",
+					"jsonFile" : "target-add_kernel-Debug-48dbe7139069a6637a64.json",
+					"name" : "add_kernel",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 7,
+					"id" : "im2col::@c30816ebdfc67c6583f0",
+					"jsonFile" : "target-im2col-Debug-cfca5329ad806200c92f.json",
+					"name" : "im2col",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "matmul_test::@0489b1597bb47cc8cc7b",
+					"jsonFile" : "target-matmul_test-Debug-e35c84502b6436d55159.json",
+					"name" : "matmul_test",
+					"projectIndex" : 0
+				},
+				{
 					"directoryIndex" : 2,
 					"id" : "matmul_v1::@0489b1597bb47cc8cc7b",
-					"jsonFile" : "target-matmul_v1-Debug-db607dfd6e2eceb8bed7.json",
+					"jsonFile" : "target-matmul_v1-Debug-0d6a81a71ee84537968e.json",
 					"name" : "matmul_v1",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 2,
 					"id" : "matmul_v2::@0489b1597bb47cc8cc7b",
-					"jsonFile" : "target-matmul_v2-Debug-dec8ab767e36791dc86d.json",
+					"jsonFile" : "target-matmul_v2-Debug-62c49a36d9ec710bdd5c.json",
 					"name" : "matmul_v2",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 2,
 					"id" : "matmul_v3::@0489b1597bb47cc8cc7b",
-					"jsonFile" : "target-matmul_v3-Debug-42f3586f895823175060.json",
+					"jsonFile" : "target-matmul_v3-Debug-42f49ae303705cd53b40.json",
 					"name" : "matmul_v3",
 					"projectIndex" : 0
 				},

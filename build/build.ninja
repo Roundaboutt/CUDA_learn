@@ -351,6 +351,42 @@ build 3.matmul/matmul_v3: CUDA_EXECUTABLE_LINKER__matmul_v3_Debug 3.matmul/CMake
   TARGET_PDB = matmul_v3.dbg
   TARGET_SUPPORT_DIR = 3.matmul/CMakeFiles/matmul_v3.dir
 
+# =============================================================================
+# Object build statements for EXECUTABLE target matmul_test
+
+
+#############################################
+# Order-only phony target for matmul_test
+
+build cmake_object_order_depends_target_matmul_test: phony || .
+
+build 3.matmul/CMakeFiles/matmul_test.dir/matmul_test.cu.o: CUDA_COMPILER__matmul_test_unscanned_Debug /home/a1097/Project/cuda_learn/3.matmul/matmul_test.cu || cmake_object_order_depends_target_matmul_test
+  CONFIG = Debug
+  DEP_FILE = 3.matmul/CMakeFiles/matmul_test.dir/matmul_test.cu.o.d
+  FLAGS = -g "--generate-code=arch=compute_75,code=[compute_75,sm_75]"
+  OBJECT_DIR = 3.matmul/CMakeFiles/matmul_test.dir
+  OBJECT_FILE_DIR = 3.matmul/CMakeFiles/matmul_test.dir
+  TARGET_SUPPORT_DIR = 3.matmul/CMakeFiles/matmul_test.dir
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target matmul_test
+
+
+#############################################
+# Link the executable 3.matmul/matmul_test
+
+build 3.matmul/matmul_test: CUDA_EXECUTABLE_LINKER__matmul_test_Debug 3.matmul/CMakeFiles/matmul_test.dir/matmul_test.cu.o
+  CONFIG = Debug
+  FLAGS = -g "--generate-code=arch=compute_75,code=[compute_75,sm_75]"
+  LINK_LIBRARIES = -lcudadevrt  -lcudart_static  -lrt  -lpthread  -ldl
+  OBJECT_DIR = 3.matmul/CMakeFiles/matmul_test.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = 3.matmul/matmul_test
+  TARGET_PDB = matmul_test.dbg
+  TARGET_SUPPORT_DIR = 3.matmul/CMakeFiles/matmul_test.dir
+
 
 #############################################
 # Utility command for edit_cache
@@ -639,9 +675,143 @@ build 6.RMSNorm/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
 build 6.RMSNorm/rebuild_cache: phony 6.RMSNorm/CMakeFiles/rebuild_cache.util
 
 # =============================================================================
+# Write statements declared in CMakeLists.txt:
+# /home/a1097/Project/cuda_learn/CMakeLists.txt
+# =============================================================================
+
+# =============================================================================
+# Object build statements for EXECUTABLE target add_kernel
+
+
+#############################################
+# Order-only phony target for add_kernel
+
+build cmake_object_order_depends_target_add_kernel: phony || .
+
+build 7.vector_add/CMakeFiles/add_kernel.dir/add_kernel.cu.o: CUDA_COMPILER__add_kernel_unscanned_Debug /home/a1097/Project/cuda_learn/7.vector_add/add_kernel.cu || cmake_object_order_depends_target_add_kernel
+  CONFIG = Debug
+  DEP_FILE = 7.vector_add/CMakeFiles/add_kernel.dir/add_kernel.cu.o.d
+  FLAGS = -g "--generate-code=arch=compute_75,code=[compute_75,sm_75]"
+  OBJECT_DIR = 7.vector_add/CMakeFiles/add_kernel.dir
+  OBJECT_FILE_DIR = 7.vector_add/CMakeFiles/add_kernel.dir
+  TARGET_SUPPORT_DIR = 7.vector_add/CMakeFiles/add_kernel.dir
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target add_kernel
+
+
+#############################################
+# Link the executable 7.vector_add/add_kernel
+
+build 7.vector_add/add_kernel: CUDA_EXECUTABLE_LINKER__add_kernel_Debug 7.vector_add/CMakeFiles/add_kernel.dir/add_kernel.cu.o
+  CONFIG = Debug
+  FLAGS = -g "--generate-code=arch=compute_75,code=[compute_75,sm_75]"
+  LINK_LIBRARIES = -lcudadevrt  -lcudart_static  -lrt  -lpthread  -ldl
+  OBJECT_DIR = 7.vector_add/CMakeFiles/add_kernel.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = 7.vector_add/add_kernel
+  TARGET_PDB = add_kernel.dbg
+  TARGET_SUPPORT_DIR = 7.vector_add/CMakeFiles/add_kernel.dir
+
+
+#############################################
+# Utility command for edit_cache
+
+build 7.vector_add/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /home/a1097/Project/cuda_learn/build/7.vector_add && /home/a1097/cmake-4.2.0/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  DESC = No interactive CMake dialog available...
+  restat = 1
+
+build 7.vector_add/edit_cache: phony 7.vector_add/CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build 7.vector_add/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /home/a1097/Project/cuda_learn/build/7.vector_add && /home/a1097/cmake-4.2.0/bin/cmake --regenerate-during-build -S/home/a1097/Project/cuda_learn -B/home/a1097/Project/cuda_learn/build
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build 7.vector_add/rebuild_cache: phony 7.vector_add/CMakeFiles/rebuild_cache.util
+
+# =============================================================================
+# Write statements declared in CMakeLists.txt:
+# /home/a1097/Project/cuda_learn/CMakeLists.txt
+# =============================================================================
+
+# =============================================================================
+# Object build statements for EXECUTABLE target im2col
+
+
+#############################################
+# Order-only phony target for im2col
+
+build cmake_object_order_depends_target_im2col: phony || .
+
+build 8.conv/CMakeFiles/im2col.dir/im2col.cu.o: CUDA_COMPILER__im2col_unscanned_Debug /home/a1097/Project/cuda_learn/8.conv/im2col.cu || cmake_object_order_depends_target_im2col
+  CONFIG = Debug
+  DEP_FILE = 8.conv/CMakeFiles/im2col.dir/im2col.cu.o.d
+  FLAGS = -g "--generate-code=arch=compute_75,code=[compute_75,sm_75]"
+  OBJECT_DIR = 8.conv/CMakeFiles/im2col.dir
+  OBJECT_FILE_DIR = 8.conv/CMakeFiles/im2col.dir
+  TARGET_SUPPORT_DIR = 8.conv/CMakeFiles/im2col.dir
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target im2col
+
+
+#############################################
+# Link the executable 8.conv/im2col
+
+build 8.conv/im2col: CUDA_EXECUTABLE_LINKER__im2col_Debug 8.conv/CMakeFiles/im2col.dir/im2col.cu.o
+  CONFIG = Debug
+  FLAGS = -g "--generate-code=arch=compute_75,code=[compute_75,sm_75]"
+  LINK_LIBRARIES = -lcudadevrt  -lcudart_static  -lrt  -lpthread  -ldl
+  OBJECT_DIR = 8.conv/CMakeFiles/im2col.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = 8.conv/im2col
+  TARGET_PDB = im2col.dbg
+  TARGET_SUPPORT_DIR = 8.conv/CMakeFiles/im2col.dir
+
+
+#############################################
+# Utility command for edit_cache
+
+build 8.conv/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /home/a1097/Project/cuda_learn/build/8.conv && /home/a1097/cmake-4.2.0/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  DESC = No interactive CMake dialog available...
+  restat = 1
+
+build 8.conv/edit_cache: phony 8.conv/CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build 8.conv/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /home/a1097/Project/cuda_learn/build/8.conv && /home/a1097/cmake-4.2.0/bin/cmake --regenerate-during-build -S/home/a1097/Project/cuda_learn -B/home/a1097/Project/cuda_learn/build
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build 8.conv/rebuild_cache: phony 8.conv/CMakeFiles/rebuild_cache.util
+
+# =============================================================================
 # Target aliases.
 
 build RMSNorm_test: phony 6.RMSNorm/RMSNorm_test
+
+build add_kernel: phony 7.vector_add/add_kernel
+
+build im2col: phony 8.conv/im2col
+
+build matmul_test: phony 3.matmul/matmul_test
 
 build matmul_v1: phony 3.matmul/matmul_v1
 
@@ -673,7 +843,7 @@ build transpose_shared_memory: phony 5.transpose/transpose_shared_memory
 #############################################
 # Folder: /home/a1097/Project/cuda_learn/build
 
-build codegen: phony 1.softmax/codegen 3.matmul/codegen 5.transpose/codegen 2.reduce/codegen 6.RMSNorm/codegen
+build codegen: phony 1.softmax/codegen 3.matmul/codegen 5.transpose/codegen 2.reduce/codegen 6.RMSNorm/codegen 7.vector_add/codegen 8.conv/codegen
 
 # =============================================================================
 
@@ -713,9 +883,23 @@ build 6.RMSNorm/codegen: phony
 # =============================================================================
 
 #############################################
+# Folder: /home/a1097/Project/cuda_learn/build/7.vector_add
+
+build 7.vector_add/codegen: phony
+
+# =============================================================================
+
+#############################################
+# Folder: /home/a1097/Project/cuda_learn/build/8.conv
+
+build 8.conv/codegen: phony
+
+# =============================================================================
+
+#############################################
 # Folder: /home/a1097/Project/cuda_learn/build
 
-build all: phony 1.softmax/all 3.matmul/all 5.transpose/all 2.reduce/all 6.RMSNorm/all
+build all: phony 1.softmax/all 3.matmul/all 5.transpose/all 2.reduce/all 6.RMSNorm/all 7.vector_add/all 8.conv/all
 
 # =============================================================================
 
@@ -736,7 +920,7 @@ build 2.reduce/all: phony 2.reduce/reduce_test
 #############################################
 # Folder: /home/a1097/Project/cuda_learn/build/3.matmul
 
-build 3.matmul/all: phony 3.matmul/matmul_v1 3.matmul/matmul_v2 3.matmul/matmul_v3
+build 3.matmul/all: phony 3.matmul/matmul_v1 3.matmul/matmul_v2 3.matmul/matmul_v3 3.matmul/matmul_test
 
 # =============================================================================
 
@@ -753,20 +937,34 @@ build 5.transpose/all: phony 5.transpose/transpose_naive 5.transpose/transpose_f
 build 6.RMSNorm/all: phony 6.RMSNorm/RMSNorm_test
 
 # =============================================================================
+
+#############################################
+# Folder: /home/a1097/Project/cuda_learn/build/7.vector_add
+
+build 7.vector_add/all: phony 7.vector_add/add_kernel
+
+# =============================================================================
+
+#############################################
+# Folder: /home/a1097/Project/cuda_learn/build/8.conv
+
+build 8.conv/all: phony 8.conv/im2col
+
+# =============================================================================
 # Built-in targets
 
 
 #############################################
 # Re-run CMake if any of its inputs changed.
 
-build build.ninja /home/a1097/Project/cuda_learn/build/cmake_install.cmake /home/a1097/Project/cuda_learn/build/1.softmax/cmake_install.cmake /home/a1097/Project/cuda_learn/build/3.matmul/cmake_install.cmake /home/a1097/Project/cuda_learn/build/5.transpose/cmake_install.cmake /home/a1097/Project/cuda_learn/build/2.reduce/cmake_install.cmake /home/a1097/Project/cuda_learn/build/6.RMSNorm/cmake_install.cmake: RERUN_CMAKE | /home/a1097/Project/cuda_learn/1.softmax/CMakeLists.txt /home/a1097/Project/cuda_learn/2.reduce/CMakeLists.txt /home/a1097/Project/cuda_learn/3.matmul/CMakeLists.txt /home/a1097/Project/cuda_learn/5.transpose/CMakeLists.txt /home/a1097/Project/cuda_learn/6.RMSNorm/CMakeLists.txt /home/a1097/Project/cuda_learn/CMakeLists.txt /home/a1097/cmake-4.2.0/Modules/CMakeCInformation.cmake /home/a1097/cmake-4.2.0/Modules/CMakeCUDAInformation.cmake /home/a1097/cmake-4.2.0/Modules/CMakeCXXInformation.cmake /home/a1097/cmake-4.2.0/Modules/CMakeCommonLanguageInclude.cmake /home/a1097/cmake-4.2.0/Modules/CMakeGenericSystem.cmake /home/a1097/cmake-4.2.0/Modules/CMakeInitializeConfigs.cmake /home/a1097/cmake-4.2.0/Modules/CMakeLanguageInformation.cmake /home/a1097/cmake-4.2.0/Modules/CMakeSystemSpecificInformation.cmake /home/a1097/cmake-4.2.0/Modules/CMakeSystemSpecificInitialize.cmake /home/a1097/cmake-4.2.0/Modules/CheckCSourceCompiles.cmake /home/a1097/cmake-4.2.0/Modules/CheckIncludeFile.cmake /home/a1097/cmake-4.2.0/Modules/CheckLibraryExists.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/CMakeCommonCompilerMacros.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/GNU-C.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/GNU-CXX.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/GNU.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/NVIDIA-CUDA.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/NVIDIA.cmake /home/a1097/cmake-4.2.0/Modules/FindCUDAToolkit.cmake /home/a1097/cmake-4.2.0/Modules/FindPackageHandleStandardArgs.cmake /home/a1097/cmake-4.2.0/Modules/FindPackageMessage.cmake /home/a1097/cmake-4.2.0/Modules/FindThreads.cmake /home/a1097/cmake-4.2.0/Modules/Internal/CMakeCLinkerInformation.cmake /home/a1097/cmake-4.2.0/Modules/Internal/CMakeCXXLinkerInformation.cmake /home/a1097/cmake-4.2.0/Modules/Internal/CMakeCommonLinkerInformation.cmake /home/a1097/cmake-4.2.0/Modules/Internal/CheckSourceCompiles.cmake /home/a1097/cmake-4.2.0/Modules/Linker/GNU-C.cmake /home/a1097/cmake-4.2.0/Modules/Linker/GNU-CXX.cmake /home/a1097/cmake-4.2.0/Modules/Linker/GNU.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linker/GNU.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linker/Linux-GNU-C.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linker/Linux-GNU-CXX.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linker/Linux-GNU.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux-GNU-C.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux-GNU-CXX.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux-GNU.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux-Initialize.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux-NVIDIA-CUDA.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux.cmake /home/a1097/cmake-4.2.0/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/4.2.0/CMakeCCompiler.cmake CMakeFiles/4.2.0/CMakeCUDACompiler.cmake CMakeFiles/4.2.0/CMakeCXXCompiler.cmake CMakeFiles/4.2.0/CMakeSystem.cmake
+build build.ninja /home/a1097/Project/cuda_learn/build/cmake_install.cmake /home/a1097/Project/cuda_learn/build/1.softmax/cmake_install.cmake /home/a1097/Project/cuda_learn/build/3.matmul/cmake_install.cmake /home/a1097/Project/cuda_learn/build/5.transpose/cmake_install.cmake /home/a1097/Project/cuda_learn/build/2.reduce/cmake_install.cmake /home/a1097/Project/cuda_learn/build/6.RMSNorm/cmake_install.cmake /home/a1097/Project/cuda_learn/build/7.vector_add/cmake_install.cmake /home/a1097/Project/cuda_learn/build/8.conv/cmake_install.cmake: RERUN_CMAKE | /home/a1097/Project/cuda_learn/1.softmax/CMakeLists.txt /home/a1097/Project/cuda_learn/2.reduce/CMakeLists.txt /home/a1097/Project/cuda_learn/3.matmul/CMakeLists.txt /home/a1097/Project/cuda_learn/5.transpose/CMakeLists.txt /home/a1097/Project/cuda_learn/6.RMSNorm/CMakeLists.txt /home/a1097/Project/cuda_learn/7.vector_add/CMakeLists.txt /home/a1097/Project/cuda_learn/8.conv/CMakeLists.txt /home/a1097/Project/cuda_learn/CMakeLists.txt /home/a1097/cmake-4.2.0/Modules/CMakeCInformation.cmake /home/a1097/cmake-4.2.0/Modules/CMakeCUDAInformation.cmake /home/a1097/cmake-4.2.0/Modules/CMakeCXXInformation.cmake /home/a1097/cmake-4.2.0/Modules/CMakeCommonLanguageInclude.cmake /home/a1097/cmake-4.2.0/Modules/CMakeGenericSystem.cmake /home/a1097/cmake-4.2.0/Modules/CMakeInitializeConfigs.cmake /home/a1097/cmake-4.2.0/Modules/CMakeLanguageInformation.cmake /home/a1097/cmake-4.2.0/Modules/CMakeSystemSpecificInformation.cmake /home/a1097/cmake-4.2.0/Modules/CMakeSystemSpecificInitialize.cmake /home/a1097/cmake-4.2.0/Modules/CheckCSourceCompiles.cmake /home/a1097/cmake-4.2.0/Modules/CheckIncludeFile.cmake /home/a1097/cmake-4.2.0/Modules/CheckLibraryExists.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/CMakeCommonCompilerMacros.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/GNU-C.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/GNU-CXX.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/GNU.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/NVIDIA-CUDA.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/NVIDIA.cmake /home/a1097/cmake-4.2.0/Modules/FindCUDAToolkit.cmake /home/a1097/cmake-4.2.0/Modules/FindPackageHandleStandardArgs.cmake /home/a1097/cmake-4.2.0/Modules/FindPackageMessage.cmake /home/a1097/cmake-4.2.0/Modules/FindThreads.cmake /home/a1097/cmake-4.2.0/Modules/Internal/CMakeCLinkerInformation.cmake /home/a1097/cmake-4.2.0/Modules/Internal/CMakeCXXLinkerInformation.cmake /home/a1097/cmake-4.2.0/Modules/Internal/CMakeCommonLinkerInformation.cmake /home/a1097/cmake-4.2.0/Modules/Internal/CheckSourceCompiles.cmake /home/a1097/cmake-4.2.0/Modules/Linker/GNU-C.cmake /home/a1097/cmake-4.2.0/Modules/Linker/GNU-CXX.cmake /home/a1097/cmake-4.2.0/Modules/Linker/GNU.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linker/GNU.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linker/Linux-GNU-C.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linker/Linux-GNU-CXX.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linker/Linux-GNU.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux-GNU-C.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux-GNU-CXX.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux-GNU.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux-Initialize.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux-NVIDIA-CUDA.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux.cmake /home/a1097/cmake-4.2.0/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/4.2.0/CMakeCCompiler.cmake CMakeFiles/4.2.0/CMakeCUDACompiler.cmake CMakeFiles/4.2.0/CMakeCXXCompiler.cmake CMakeFiles/4.2.0/CMakeSystem.cmake
   pool = console
 
 
 #############################################
 # A missing CMake input file is not an error.
 
-build /home/a1097/Project/cuda_learn/1.softmax/CMakeLists.txt /home/a1097/Project/cuda_learn/2.reduce/CMakeLists.txt /home/a1097/Project/cuda_learn/3.matmul/CMakeLists.txt /home/a1097/Project/cuda_learn/5.transpose/CMakeLists.txt /home/a1097/Project/cuda_learn/6.RMSNorm/CMakeLists.txt /home/a1097/Project/cuda_learn/CMakeLists.txt /home/a1097/cmake-4.2.0/Modules/CMakeCInformation.cmake /home/a1097/cmake-4.2.0/Modules/CMakeCUDAInformation.cmake /home/a1097/cmake-4.2.0/Modules/CMakeCXXInformation.cmake /home/a1097/cmake-4.2.0/Modules/CMakeCommonLanguageInclude.cmake /home/a1097/cmake-4.2.0/Modules/CMakeGenericSystem.cmake /home/a1097/cmake-4.2.0/Modules/CMakeInitializeConfigs.cmake /home/a1097/cmake-4.2.0/Modules/CMakeLanguageInformation.cmake /home/a1097/cmake-4.2.0/Modules/CMakeSystemSpecificInformation.cmake /home/a1097/cmake-4.2.0/Modules/CMakeSystemSpecificInitialize.cmake /home/a1097/cmake-4.2.0/Modules/CheckCSourceCompiles.cmake /home/a1097/cmake-4.2.0/Modules/CheckIncludeFile.cmake /home/a1097/cmake-4.2.0/Modules/CheckLibraryExists.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/CMakeCommonCompilerMacros.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/GNU-C.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/GNU-CXX.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/GNU.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/NVIDIA-CUDA.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/NVIDIA.cmake /home/a1097/cmake-4.2.0/Modules/FindCUDAToolkit.cmake /home/a1097/cmake-4.2.0/Modules/FindPackageHandleStandardArgs.cmake /home/a1097/cmake-4.2.0/Modules/FindPackageMessage.cmake /home/a1097/cmake-4.2.0/Modules/FindThreads.cmake /home/a1097/cmake-4.2.0/Modules/Internal/CMakeCLinkerInformation.cmake /home/a1097/cmake-4.2.0/Modules/Internal/CMakeCXXLinkerInformation.cmake /home/a1097/cmake-4.2.0/Modules/Internal/CMakeCommonLinkerInformation.cmake /home/a1097/cmake-4.2.0/Modules/Internal/CheckSourceCompiles.cmake /home/a1097/cmake-4.2.0/Modules/Linker/GNU-C.cmake /home/a1097/cmake-4.2.0/Modules/Linker/GNU-CXX.cmake /home/a1097/cmake-4.2.0/Modules/Linker/GNU.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linker/GNU.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linker/Linux-GNU-C.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linker/Linux-GNU-CXX.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linker/Linux-GNU.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux-GNU-C.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux-GNU-CXX.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux-GNU.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux-Initialize.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux-NVIDIA-CUDA.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux.cmake /home/a1097/cmake-4.2.0/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/4.2.0/CMakeCCompiler.cmake CMakeFiles/4.2.0/CMakeCUDACompiler.cmake CMakeFiles/4.2.0/CMakeCXXCompiler.cmake CMakeFiles/4.2.0/CMakeSystem.cmake: phony
+build /home/a1097/Project/cuda_learn/1.softmax/CMakeLists.txt /home/a1097/Project/cuda_learn/2.reduce/CMakeLists.txt /home/a1097/Project/cuda_learn/3.matmul/CMakeLists.txt /home/a1097/Project/cuda_learn/5.transpose/CMakeLists.txt /home/a1097/Project/cuda_learn/6.RMSNorm/CMakeLists.txt /home/a1097/Project/cuda_learn/7.vector_add/CMakeLists.txt /home/a1097/Project/cuda_learn/8.conv/CMakeLists.txt /home/a1097/Project/cuda_learn/CMakeLists.txt /home/a1097/cmake-4.2.0/Modules/CMakeCInformation.cmake /home/a1097/cmake-4.2.0/Modules/CMakeCUDAInformation.cmake /home/a1097/cmake-4.2.0/Modules/CMakeCXXInformation.cmake /home/a1097/cmake-4.2.0/Modules/CMakeCommonLanguageInclude.cmake /home/a1097/cmake-4.2.0/Modules/CMakeGenericSystem.cmake /home/a1097/cmake-4.2.0/Modules/CMakeInitializeConfigs.cmake /home/a1097/cmake-4.2.0/Modules/CMakeLanguageInformation.cmake /home/a1097/cmake-4.2.0/Modules/CMakeSystemSpecificInformation.cmake /home/a1097/cmake-4.2.0/Modules/CMakeSystemSpecificInitialize.cmake /home/a1097/cmake-4.2.0/Modules/CheckCSourceCompiles.cmake /home/a1097/cmake-4.2.0/Modules/CheckIncludeFile.cmake /home/a1097/cmake-4.2.0/Modules/CheckLibraryExists.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/CMakeCommonCompilerMacros.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/GNU-C.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/GNU-CXX.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/GNU.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/NVIDIA-CUDA.cmake /home/a1097/cmake-4.2.0/Modules/Compiler/NVIDIA.cmake /home/a1097/cmake-4.2.0/Modules/FindCUDAToolkit.cmake /home/a1097/cmake-4.2.0/Modules/FindPackageHandleStandardArgs.cmake /home/a1097/cmake-4.2.0/Modules/FindPackageMessage.cmake /home/a1097/cmake-4.2.0/Modules/FindThreads.cmake /home/a1097/cmake-4.2.0/Modules/Internal/CMakeCLinkerInformation.cmake /home/a1097/cmake-4.2.0/Modules/Internal/CMakeCXXLinkerInformation.cmake /home/a1097/cmake-4.2.0/Modules/Internal/CMakeCommonLinkerInformation.cmake /home/a1097/cmake-4.2.0/Modules/Internal/CheckSourceCompiles.cmake /home/a1097/cmake-4.2.0/Modules/Linker/GNU-C.cmake /home/a1097/cmake-4.2.0/Modules/Linker/GNU-CXX.cmake /home/a1097/cmake-4.2.0/Modules/Linker/GNU.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linker/GNU.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linker/Linux-GNU-C.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linker/Linux-GNU-CXX.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linker/Linux-GNU.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux-GNU-C.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux-GNU-CXX.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux-GNU.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux-Initialize.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux-NVIDIA-CUDA.cmake /home/a1097/cmake-4.2.0/Modules/Platform/Linux.cmake /home/a1097/cmake-4.2.0/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/4.2.0/CMakeCCompiler.cmake CMakeFiles/4.2.0/CMakeCUDACompiler.cmake CMakeFiles/4.2.0/CMakeCXXCompiler.cmake CMakeFiles/4.2.0/CMakeSystem.cmake: phony
 
 
 #############################################

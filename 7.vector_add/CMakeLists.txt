@@ -1,0 +1,1 @@
+add_executable(add_kernel add_kernel.cu)

@@ -8,17 +8,15 @@
 __global__ void sgemm_v1(float* A, float* B, float* C, int M, int N, int K, float alpha, float beta){
     const int global_x = threadIdx.x + blockIdx.x * blockDim.x;
     const int global_y = threadIdx.y + blockIdx.y * blockDim.y;
-    
-    if (global_x >= N || global_y >= N) return;
+    if (global_x >= N || global_y >= M) return;
 
     float temp = 0.f;
-
-#pragma unroll
-    for (int k = 0; k < K; ++k)
+    
+    for (int k = 0; k < K; k++)
     {
         temp += A[OFFSET(global_y, k, K)] * B[OFFSET(k, global_x, N)];
     }
-    C[OFFSET(global_y, global_x, N)] = alpha * temp + beta * C[OFFSET(global_y, global_x, N)];
+    C[OFFSET(global_y, global_x, N)] = alpha * temp + C[OFFSET(global_y, global_x, N)] * beta;
 }
 
 void call_v1(float* A, float* B, float* C, int M, int N, int K){

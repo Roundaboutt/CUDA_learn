@@ -46606,3 +46606,249 @@ events:
       CMAKE_SYSTEM_INCLUDE_PATH:
         - "/usr/include/X11"
 ...
+
+---
+events:
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/a1097/cmake-4.2.0/Modules/FindCUDAToolkit.cmake:1088 (find_path)"
+      - "CMakeLists.txt:3 (find_package)"
+    mode: "path"
+    variable: "CUDAToolkit_CUBLAS_INCLUDE_DIR"
+    description: "Path to a file."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "cublas_v2.h"
+    candidate_directories:
+      - "/usr/local/cuda/targets/x86_64-linux/include/"
+      - "/usr/local/cuda/targets/x86_64-linux/include/cccl/"
+    found: "/usr/local/cuda/targets/x86_64-linux/include/"
+    search_context:
+      ENV{PATH}:
+        - "/home/a1097/.vscode-server/bin/994fd12f8d3a5aa16f17d42c041e5809167e845a/bin/remote-cli"
+        - "/home/a1097/.local/bin"
+        - "/home/a1097/miniconda3/bin"
+        - "/usr/bin"
+        - "/home/a1097/cmake-4.2.0/bin"
+        - "/usr/local/sbin"
+        - "/usr/local/bin"
+        - "/usr/sbin"
+        - "/usr/bin"
+        - "/sbin"
+        - "/bin"
+        - "/usr/games"
+        - "/usr/local/games"
+        - "/usr/lib/wsl/lib"
+        - "/mnt/c/Program Files/WindowsApps/MicrosoftCorporationII.WindowsSubsystemForLinux_2.4.11.0_x64__8wekyb3d8bbwe"
+        - "/mnt/c/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.8/bin"
+        - "/mnt/c/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.8/libnvvp"
+        - "/mnt/c/Windows/system32"
+        - "/mnt/c/Windows"
+        - "/mnt/c/Windows/System32/Wbem"
+        - "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/"
+        - "/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common"
+        - "/mnt/d/mingw64/bin"
+        - "/mnt/c/Program Files/NVIDIA Corporation/NVIDIA app/NvDLISR"
+        - "/mnt/c/Program Files/NVIDIA Corporation/Nsight Compute 2025.1.1/"
+        - "/mnt/c/Users/a1097/AppData/Roaming/Python"
+        - "/mnt/c/Users/a1097/AppData/Roaming/Python/Python312/Scripts"
+        - "/mnt/f/Git/cmd"
+        - "/mnt/d/VisualStudio2022/VC/Tools/MSVC/14.42.34433/bin/Hostx64/x64"
+        - "/mnt/c/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.8/bin"
+        - "/mnt/c/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.8/libnvvp"
+        - "/mnt/f/CMake/bin"
+        - "/mnt/f/miniconda3/Scripts"
+        - "/mnt/f/miniconda3/condabin"
+        - "/mnt/f/CMake/bin"
+        - "/mnt/c/Users/a1097/AppData/Local/Microsoft/WindowsApps"
+        - "/mnt/c/Users/a1097/.dotnet/tools"
+        - "/mnt/d/vscode/Microsoft VS Code/bin"
+        - "/mnt/c/Users/a1097/AppData/Local/GitHubDesktop/bin"
+        - "/mnt/c/Users/a1097/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-7.1.1-full_build/bin"
+        - "/snap/bin"
+        - "/usr/local/cuda/bin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/home"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+      CMAKE_SYSTEM_INCLUDE_PATH:
+        - "/usr/include/X11"
+...
+
+---
+events:
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/a1097/cmake-4.2.0/Modules/FindCUDAToolkit.cmake:1088 (find_path)"
+      - "CMakeLists.txt:3 (find_package)"
+    mode: "path"
+    variable: "CUDAToolkit_CUBLAS_INCLUDE_DIR"
+    description: "Path to a file."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "cublas_v2.h"
+    candidate_directories:
+      - "/usr/local/cuda/targets/x86_64-linux/include/"
+      - "/usr/local/cuda/targets/x86_64-linux/include/cccl/"
+    found: "/usr/local/cuda/targets/x86_64-linux/include/"
+    search_context:
+      ENV{PATH}:
+        - "/home/a1097/.vscode-server/bin/994fd12f8d3a5aa16f17d42c041e5809167e845a/bin/remote-cli"
+        - "/home/a1097/.local/bin"
+        - "/home/a1097/miniconda3/bin"
+        - "/usr/bin"
+        - "/home/a1097/cmake-4.2.0/bin"
+        - "/usr/local/sbin"
+        - "/usr/local/bin"
+        - "/usr/sbin"
+        - "/usr/bin"
+        - "/sbin"
+        - "/bin"
+        - "/usr/games"
+        - "/usr/local/games"
+        - "/usr/lib/wsl/lib"
+        - "/mnt/c/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.8/bin"
+        - "/mnt/c/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.8/libnvvp"
+        - "/mnt/c/Windows/system32"
+        - "/mnt/c/Windows"
+        - "/mnt/c/Windows/System32/Wbem"
+        - "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/"
+        - "/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common"
+        - "/mnt/d/mingw64/bin"
+        - "/mnt/c/Program Files/NVIDIA Corporation/NVIDIA app/NvDLISR"
+        - "/mnt/c/Program Files/NVIDIA Corporation/Nsight Compute 2025.1.1/"
+        - "/mnt/c/Users/a1097/AppData/Roaming/Python"
+        - "/mnt/c/Users/a1097/AppData/Roaming/Python/Python312/Scripts"
+        - "/mnt/f/Git/cmd"
+        - "/mnt/d/VisualStudio2022/VC/Tools/MSVC/14.42.34433/bin/Hostx64/x64"
+        - "/mnt/c/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.8/bin"
+        - "/mnt/c/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.8/libnvvp"
+        - "/mnt/f/CMake/bin"
+        - "/mnt/f/miniconda3/Scripts"
+        - "/mnt/f/miniconda3/condabin"
+        - "/mnt/f/CMake/bin"
+        - "/mnt/c/Users/a1097/AppData/Local/Microsoft/WindowsApps"
+        - "/mnt/c/Users/a1097/.dotnet/tools"
+        - "/mnt/d/vscode/Microsoft VS Code/bin"
+        - "/mnt/c/Users/a1097/AppData/Local/GitHubDesktop/bin"
+        - "/mnt/c/Users/a1097/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-7.1.1-full_build/bin"
+        - "/snap/bin"
+        - "/usr/local/cuda/bin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/home"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+      CMAKE_SYSTEM_INCLUDE_PATH:
+        - "/usr/include/X11"
+...
+
+---
+events:
+  -
+    kind: "find-v1"
+    backtrace:
+      - "/home/a1097/cmake-4.2.0/Modules/FindCUDAToolkit.cmake:1088 (find_path)"
+      - "CMakeLists.txt:3 (find_package)"
+    mode: "path"
+    variable: "CUDAToolkit_CUBLAS_INCLUDE_DIR"
+    description: "Path to a file."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "cublas_v2.h"
+    candidate_directories:
+      - "/usr/local/cuda/targets/x86_64-linux/include/"
+      - "/usr/local/cuda/targets/x86_64-linux/include/cccl/"
+    found: "/usr/local/cuda/targets/x86_64-linux/include/"
+    search_context:
+      ENV{PATH}:
+        - "/home/a1097/.vscode-server/bin/994fd12f8d3a5aa16f17d42c041e5809167e845a/bin/remote-cli"
+        - "/home/a1097/.local/bin"
+        - "/home/a1097/.cargo/bin"
+        - "/home/a1097/miniconda3/bin"
+        - "/usr/bin"
+        - "/home/a1097/cmake-4.2.0/bin"
+        - "/usr/local/sbin"
+        - "/usr/local/bin"
+        - "/usr/sbin"
+        - "/usr/bin"
+        - "/sbin"
+        - "/bin"
+        - "/usr/games"
+        - "/usr/local/games"
+        - "/usr/lib/wsl/lib"
+        - "/mnt/c/Program Files/WindowsApps/MicrosoftCorporationII.WindowsSubsystemForLinux_2.4.11.0_x64__8wekyb3d8bbwe"
+        - "/mnt/c/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.8/bin"
+        - "/mnt/c/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.8/libnvvp"
+        - "/mnt/c/Windows/system32"
+        - "/mnt/c/Windows"
+        - "/mnt/c/Windows/System32/Wbem"
+        - "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/"
+        - "/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common"
+        - "/mnt/d/mingw64/bin"
+        - "/mnt/c/Program Files/NVIDIA Corporation/NVIDIA app/NvDLISR"
+        - "/mnt/c/Program Files/NVIDIA Corporation/Nsight Compute 2025.1.1/"
+        - "/mnt/c/Users/a1097/AppData/Roaming/Python"
+        - "/mnt/c/Users/a1097/AppData/Roaming/Python/Python312/Scripts"
+        - "/mnt/f/Git/cmd"
+        - "/mnt/d/VisualStudio2022/VC/Tools/MSVC/14.42.34433/bin/Hostx64/x64"
+        - "/mnt/c/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.8/bin"
+        - "/mnt/c/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v12.8/libnvvp"
+        - "/mnt/f/CMake/bin"
+        - "/mnt/f/miniconda3/Scripts"
+        - "/mnt/f/miniconda3/condabin"
+        - "/mnt/f/CMake/bin"
+        - "/mnt/c/Users/a1097/AppData/Local/Microsoft/WindowsApps"
+        - "/mnt/c/Users/a1097/.dotnet/tools"
+        - "/mnt/d/vscode/Microsoft VS Code/bin"
+        - "/mnt/c/Users/a1097/AppData/Local/GitHubDesktop/bin"
+        - "/mnt/c/Users/a1097/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-7.1.1-full_build/bin"
+        - "/snap/bin"
+        - "/usr/local/cuda/bin"
+      CMAKE_INSTALL_PREFIX: "/usr/local"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/usr/local"
+        - "/usr"
+        - "/"
+        - "/home"
+        - "/usr/local"
+        - "/usr/X11R6"
+        - "/usr/pkg"
+        - "/opt"
+      CMAKE_SYSTEM_INCLUDE_PATH:
+        - "/usr/include/X11"
+...
